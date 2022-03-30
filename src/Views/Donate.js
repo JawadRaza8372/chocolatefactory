@@ -9,6 +9,7 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  SafeAreaView,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { w, h } from "react-native-responsiveness";
@@ -26,7 +27,7 @@ const Donate = ({ navigation }) => {
   const descp =
     "By recognizing and making informed food choices, we can prevent injustices against people, the envirement and animals.";
   return (
-    <View style={{ width: "100%", height: "100%" }}>
+    <SafeAreaView style={{ width: "100%", height: "100%" }}>
       <ScreenHeader
         isMenuButton
         title={"Donate Us"}
@@ -57,7 +58,7 @@ const Donate = ({ navigation }) => {
           onPressFun={() => console.log("donate")}
         />
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 

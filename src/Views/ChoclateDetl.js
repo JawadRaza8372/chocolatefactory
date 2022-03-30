@@ -31,16 +31,12 @@ const ChoclateDetl = ({ navigation }) => {
       : "UnKnown";
 
   return (
-    <SafeAreaView
-      style={{ width: "100%", height: "100%", backgroundColor: screenbg }}
-    >
+    <SafeAreaView style={styles.safediv}>
       <ScreenHeader
         title={"Company Name"}
         onPressFun={() => navigation.goBack()}
       />
-      <ScrollView
-        contentContainerStyle={{ width: "100%", paddingBottom: h("2.5%") }}
-      >
+      <ScrollView contentContainerStyle={styles.scrolldiv}>
         <View style={{ ...styles.status, backgroundColor: statusBg }}>
           <Text style={styles.statusTxt}>{statustxt}</Text>
         </View>
@@ -127,4 +123,6 @@ const styles = StyleSheet.create({
     height: "100%",
     resizeMode: "cover",
   },
+  safediv: { width: "100%", height: "100%", backgroundColor: screenbg },
+  scrolldiv: { width: "100%", paddingBottom: h("2.5%") },
 });

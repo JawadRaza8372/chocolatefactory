@@ -72,20 +72,10 @@ const Donate = ({ navigation }) => {
           horizontal
           showsHorizontalScrollIndicator={false}
           pagingEnabled
-          renderItem={({ item, datindex }) => {
+          renderItem={({ item }) => {
             return (
               <>
-                <View
-                  style={{
-                    width: w("100%"),
-                    height: "100%",
-                    backgroundColor: screenbg,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-evenly",
-                    flexDirection: "column",
-                  }}
-                >
+                <View style={styles.maindiv}>
                   <Text style={styles.heading}>{item.heading}</Text>
 
                   <Image source={item.img} style={styles.spalshImg} />
@@ -187,5 +177,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
+  },
+  maindiv: {
+    width: w("100%"),
+    height: "100%",
+    backgroundColor: screenbg,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-evenly",
+    flexDirection: "column",
   },
 });
