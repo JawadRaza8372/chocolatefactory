@@ -9,6 +9,7 @@ import SearchComp from "../Components/SearchComp";
 import { NavigationContainer } from "@react-navigation/native";
 const SrchScnScreen = ({ navigation }) => {
   const [selected, setselected] = useState("Search");
+  const [searchtext, setsearchtext] = useState("");
   const data = [
     {
       title: "  List",
@@ -29,6 +30,9 @@ const SrchScnScreen = ({ navigation }) => {
       },
     },
   ];
+  const itemonPress = (data) => {
+    navigation.navigate("chocoItemDesc", { data: data });
+  };
   return (
     <SafeAreaView style={styles.bgdiv}>
       {selected === "Scan" ? (
@@ -38,7 +42,11 @@ const SrchScnScreen = ({ navigation }) => {
         />
       ) : (
         <ScreenHeader onPressFun={() => navigation.goBack()}>
-          <TextInput placeholder="searh" style={styles.srchinp} />
+          <TextInput
+            placeholder="searh"
+            style={styles.srchinp}
+            onChangeText={(text) => setsearchtext(text)}
+          />
         </ScreenHeader>
       )}
       <View
@@ -52,7 +60,7 @@ const SrchScnScreen = ({ navigation }) => {
         {selected === "Scan" ? (
           <ScanComp />
         ) : selected === "Search" ? (
-          <SearchComp />
+          <SearchComp searchtxt={searchtext} onClick={itemonPress} />
         ) : null}
       </View>
       <CustomNavBtn data={data} activeVal={selected} />

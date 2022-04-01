@@ -7,10 +7,11 @@ import {
   ScrollView,
   FlatList,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ScreenHeader from "../Components/ScreenHeader";
-import { screenbg } from "../AppColors";
+import { mainColor, screenbg } from "../AppColors";
 import CustomNavBtn from "../Components/CustomNavBtn";
 import { w, h } from "react-native-responsiveness";
 import HeaderInfo from "../Components/HeaderInfo";
@@ -18,12 +19,45 @@ import NewsCard from "../Components/NewsCard";
 import ItemCard from "../Components/ItemCard";
 import { AntDesign } from "@expo/vector-icons";
 import CustomModel from "../Components/CustomModel";
+import { useSelector } from "react-redux";
 const HomeScreen = ({ navigation }) => {
   const [selected, setselected] = useState("All");
   const [showModal, setshowModal] = useState(false);
+  const [chocoItems, setchocoItems] = useState([]);
+  const [isLoading, setisLoading] = useState(false);
+  const [searchtxt, setsearchtxt] = useState("");
+  const { choclateList, lastupdate } = useSelector((state) => state.project);
+  const myfilteredlist = () => {
+    // const statusBg =
+
+    if (selected !== "All") {
+      const filtered =
+        choclateList &&
+        choclateList?.filter((data) => selected === data?.status);
+      setchocoItems(filtered);
+      console.log(filtered.length);
+      console.log(selected);
+      console.log(choclateList.length);
+    } else {
+      setchocoItems(choclateList);
+    }
+  };
+  useEffect(() => {
+    setisLoading(true);
+    if (choclateList) {
+      setchocoItems(choclateList);
+      setisLoading(false);
+    }
+  }, [choclateList]);
+
+  // const chocoItems = res.choclateList ? res.choclateList : [];
+
   const toggleModal = () => {
     setshowModal(!showModal);
   };
+  useEffect(() => {
+    myfilteredlist();
+  }, [selected]);
 
   const data = [
     {
@@ -36,41 +70,40 @@ const HomeScreen = ({ navigation }) => {
     {
       title: "R",
       onpressfun: () => {
-        setselected("R");
+        setselected("RECOMMENDED");
         setshowModal(false);
       },
     },
     {
       title: "NR",
       onpressfun: () => {
-        setselected("NR");
+        setselected("CANNOT_RECOMMEND");
         setshowModal(false);
       },
     },
     {
       title: "M",
       onpressfun: () => {
-        setselected("M");
+        setselected("MIXED");
         setshowModal(false);
       },
     },
   ];
-  const myDat = [
-    { id: "hy1" },
-    { id: "hy2" },
-    { id: "hy3" },
-    { id: "hy4" },
-    { id: "hy5" },
-    { id: "hy6" },
-    { id: "hy7" },
-    { id: "hy8" },
-    { id: "hy9" },
-    { id: "hy10" },
-    { id: "hy11" },
-    { id: "hy12" },
-    { id: "hy13" },
-    { id: "hy14" },
-  ];
+  const itemonPress = (data) => {
+    navigation.navigate("chocoItemDesc", { data: data });
+  };
+  const searchfun = () => {
+    const newres =
+      choclateList &&
+      choclateList.filter((data) => data.name.includes(`${searchtxt}`));
+    if (newres) {
+      setchocoItems(newres);
+    }
+  };
+  useEffect(() => {
+    searchfun();
+  }, [searchtxt]);
+
   return (
     <>
       <SafeAreaView style={styles.bgdiv}>
@@ -89,54 +122,68 @@ const HomeScreen = ({ navigation }) => {
             alignSelf: "center",
           }}
         >
-          <ScrollView>
-            <TextInput placeholder="search" style={styles.searchinp} />
-            <HeaderInfo>
-              <View style={styles.seeall}>
-                <Text>See All</Text>
+          {/* <ScrollView> */}
+          <TextInput
+            placeholder="search"
+            style={styles.searchinp}
+            onChangeText={(text) => setsearchtxt(text)}
+          />
+
+          <NewsCard onClickf={() => navigation.navigate("newsDesc")} />
+
+          <HeaderInfo
+            title="CHOCOLATE LIST"
+            subtitle={"Last Updated:" + `${lastupdate}`}
+          >
+            <TouchableOpacity onPress={toggleModal} style={styles.flters}>
+              <View style={styles.minibtn}>
+                <Text>Filters</Text>
                 <AntDesign name="right" size={24} color="black" />
               </View>
-            </HeaderInfo>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{ height: "100%" }}
-            >
-              <NewsCard onClickf={() => navigation.navigate("newsDesc")} />
-              <NewsCard onClickf={() => navigation.navigate("newsDesc")} />
-              <NewsCard onClickf={() => navigation.navigate("newsDesc")} />
-              <NewsCard onClickf={() => navigation.navigate("newsDesc")} />
-            </ScrollView>
-            <HeaderInfo>
-              <TouchableOpacity onPress={toggleModal} style={styles.flters}>
-                <View style={styles.minibtn}>
-                  <Text>Filters</Text>
-                  <AntDesign name="right" size={24} color="black" />
-                </View>
-                <View style={styles.selecteddiv}>
-                  <Text style={styles.statsTxt}>
-                    {selected === "All"
-                      ? "All"
-                      : selected === "R"
-                      ? "Recomanded"
-                      : selected === "NR"
-                      ? "Not Recomanded"
-                      : selected === "M"
-                      ? "Mixed"
-                      : "UnKnown"}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            </HeaderInfo>
-            {myDat.map((item, index) => (
-              <ItemCard
-                key={index}
-                onClickF={() => navigation.navigate("chocoItemDesc")}
-              />
-            ))}
-          </ScrollView>
+              <View style={styles.selecteddiv}>
+                <Text style={styles.statsTxt}>
+                  {selected === "All"
+                    ? "All"
+                    : selected === "RECOMMENDED"
+                    ? "Recomanded"
+                    : selected === "CANNOT_RECOMMEND"
+                    ? "Not Recomanded"
+                    : selected === "MIXED"
+                    ? "Mixed"
+                    : ""}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </HeaderInfo>
+          {choclateList && chocoItems && !isLoading ? (
+            <FlatList
+              data={chocoItems}
+              keyExtractor={(item) => item.name}
+              renderItem={({ item }) => (
+                <ItemCard data={item} onClickF={itemonPress} />
+              )}
+            />
+          ) : (
+            <View style={styles.isLoading}>
+              <ActivityIndicator size="large" color={mainColor} />
+            </View>
+          )}
+          {/* </ScrollView> */}
         </View>
-        <CustomNavBtn data={data} activeVal={selected} />
+        <CustomNavBtn
+          data={data}
+          activeVal={
+            selected === "All"
+              ? "All"
+              : selected === "RECOMMENDED"
+              ? "R"
+              : selected === "CANNOT_RECOMMEND"
+              ? "NR"
+              : selected === "MIXED"
+              ? "M"
+              : ""
+          }
+        />
       </SafeAreaView>
       <CustomModel show={showModal} toggleModal={toggleModal}>
         <View style={styles.bgModal}>
@@ -179,12 +226,12 @@ const styles = StyleSheet.create({
     backgroundColor: screenbg,
   },
   searchinp: {
-    width: w("70%"),
-    height: h("5%"),
+    width: w("90%"),
+    height: h("6%"),
     backgroundColor: "lightgrey",
     alignSelf: "center",
     marginVertical: h("1%"),
-    borderRadius: h("5%"),
+    borderRadius: h("2%"),
     paddingHorizontal: h("2%"),
   },
   seeall: {
@@ -210,6 +257,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-end",
     flexDirection: "row",
+  },
+  isLoading: {
+    width: "100%",
+    height: h("30%"),
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
   selecteddiv: {
     width: "100%",

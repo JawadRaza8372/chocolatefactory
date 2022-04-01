@@ -5,13 +5,17 @@ import HomeScreen from "./src/Views/HomeScreen";
 import NewsDetail from "./src/Views/NewsDetail";
 import SplashScreen from "./src/Views/SplashScreen";
 import SrchScnScreen from "./src/Views/SrchScnScreen";
-
+import { useEffect } from "react";
+import { Provider, useDispatch } from "react-redux";
+import { store } from "./src/store/index";
+import { setChocoList, setFeatures } from "./src/store/projectSlice";
+import axios from "axios";
 export default function App() {
   return (
-    <>
+    <Provider store={store}>
       <StatusBar />
       <MyStackNavig />
-    </>
+    </Provider>
   );
 }
 

@@ -1,12 +1,12 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { w, h } from "react-native-responsiveness";
-const HeaderInfo = ({ children }) => {
+const HeaderInfo = ({ title, subtitle, children }) => {
   return (
     <View style={styles.mainDiv}>
       <View style={styles.txtCont}>
-        <Text style={styles.hding}>HeaderInfo</Text>
-        <Text style={styles.desc}>HeaderInfo</Text>
+        <Text style={styles.hding}>{title}</Text>
+        <Text style={styles.desc}>{subtitle}</Text>
       </View>
       <View style={styles.btnCont}>{children}</View>
     </View>
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   desc: {
-    fontSize: h("2%"),
+    fontSize: h("1.9%"),
     color: "grey",
   },
 });

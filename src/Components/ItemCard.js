@@ -2,41 +2,46 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import { w, h } from "react-native-responsiveness";
 import { screenbg } from "../AppColors";
-const ItemCard = ({ status, onClickF }) => {
-  status = "R";
+const ItemCard = ({ data, onClickF }) => {
+  // CANNOT_RECOMMEND;
+  // RECOMMENDED;
+  // MIXED;
+  // "name": "10 degrees chocolate",
+  //     "notes": null,
+  //     "status": "CANNOT_RECOMMEND",
+  //     "status_reason": "CANNOT_RECOMMEND_DID_NOT_RESPOND",
+  //     "status_url": null,
+  //     "description": null,
+  //     "logo_url": "https://media.graphcms.com/rU4nCRuQbyXAYQoMqo07",
+  //     "logo_url_retina": "https://media.graphcms.com/rU4nCRuQbyXAYQoMqo07"
+  const { name, status, logo_url } = data;
   const statusBg =
-    status === "R"
+    status === "RECOMMENDED"
       ? "green"
-      : status === "NR"
+      : status === "CANNOT_RECOMMEND"
       ? "red"
-      : status === "M"
-      ? "yellow"
+      : status === "MIXED"
+      ? "gold"
       : "black";
-  const statustxt =
-    status === "R"
-      ? "Recomanded"
-      : status === "NR"
-      ? "Not Recomanded"
-      : status === "M"
-      ? "Mixed"
-      : "UnKnown";
-
+  const onPressfun = () => {
+    onClickF(data);
+  };
   return (
     <>
-      <TouchableOpacity onPress={onClickF} style={styles.maindiv}>
+      <TouchableOpacity onPress={onPressfun} style={styles.maindiv}>
         <View style={styles.imgAvtar}>
           <Image
             source={{
-              uri: "https://images.unsplash.com/photo-1477332552946-cfb384aeaf1c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aGVhbHRofGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60",
+              uri: logo_url,
             }}
             style={styles.imgShow}
           />
         </View>
         <View style={styles.txtCont}>
-          <Text>ItemCard</Text>
+          <Text>{name}</Text>
 
           <View style={{ ...styles.status, backgroundColor: statusBg }}>
-            <Text style={styles.statusTxt}>{statustxt}</Text>
+            <Text style={styles.statusTxt}>{status}</Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -95,14 +100,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   statusTxt: {
-    fontSize: h("2.2%"),
+    fontSize: h("1.8%"),
     fontWeight: "bold",
     color: screenbg,
   },
   imgShow: {
     width: "85%",
     height: "85%",
-    resizeMode: "cover",
+    resizeMode: "contain",
     borderRadius: h("1%"),
   },
 });

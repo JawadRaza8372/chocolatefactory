@@ -31,6 +31,7 @@ export default function MyStackNavig() {
           name="chocoItemDesc"
           component={ChoclateDetl}
           options={{ headerShown: false }}
+          initialParams={{ data: null }}
         />
         <Stack.Screen
           name="newsDesc"

@@ -11,59 +11,76 @@ import { screenbg } from "../AppColors";
 import { w, h } from "react-native-responsiveness";
 import SharetoLink from "../Components/SharetoLink";
 import ScreenHeader from "../Components/ScreenHeader";
-const ChoclateDetl = ({ navigation }) => {
-  const status = "NR";
-  const statusBg =
-    status === "R"
-      ? "green"
-      : status === "NR"
-      ? "red"
-      : status === "M"
-      ? "yellow"
-      : "black";
-  const statustxt =
-    status === "R"
-      ? "Recomanded"
-      : status === "NR"
-      ? "Not Recomanded"
-      : status === "M"
-      ? "Mixed"
-      : "UnKnown";
+const ChoclateDetl = ({ route, navigation }) => {
+  const { data } = route.params;
+  const { name, status, logo_url } = data;
 
+  // CANNOT_RECOMMEND;
+  // RECOMMENDED;
+  // MIXED;
+  // "name": "10 degrees chocolate",
+  //     "notes": null,
+  //     "status": "CANNOT_RECOMMEND",
+  //     "status_reason": "CANNOT_RECOMMEND_DID_NOT_RESPOND",
+  //     "status_url": null,
+  //     "description": null,
+  //     "logo_url": "https://media.graphcms.com/rU4nCRuQbyXAYQoMqo07",
+  //     "logo_url_retina": "https://media.graphcms.com/rU4nCRuQbyXAYQoMqo07"
+  const statusBg =
+    status === "RECOMMENDED"
+      ? "green"
+      : status === "CANNOT_RECOMMEND"
+      ? "red"
+      : status === "MIXED"
+      ? "gold"
+      : "black";
+  const recomandtxt = ` Thank ${name} for not using Chocolate\nfrom some of the worse areas with Child Slavery.`;
+  const notRecomadtext = `Inform ${name} that you won’t be buying from\nthem until they agree to not using\nChocolate from some of the worst ares with Child Slavery.`;
+  const mixedtxt = `Inform ${name} that you won’t be buying from\nthem until they agree to not using\nChocolate from some of the worst ares with Child Slavery.`;
+  const mynotesrecom = `Company Responded & Veriﬁed Chocolate\nis not sourced from some of the worse areas\nwith Child Slavery`;
+  const common = `Cannot recommend because company\n${
+    status === "MIXED" ? "still " : ""
+  }sources ${
+    status === "MIXED" ? "some of it's " : ""
+  } cocao from some of the \nworst areas of Child Slavery`;
   return (
     <SafeAreaView style={styles.safediv}>
       <ScreenHeader
-        title={"Company Name"}
+        title={name ? name : "Company Name"}
         onPressFun={() => navigation.goBack()}
       />
       <ScrollView contentContainerStyle={styles.scrolldiv}>
-        <View style={{ ...styles.status, backgroundColor: statusBg }}>
-          <Text style={styles.statusTxt}>{statustxt}</Text>
+        <View
+          style={{
+            ...styles.status,
+            backgroundColor: statusBg ? statusBg : "black",
+          }}
+        >
+          <Text style={styles.statusTxt}>{status ? status : "Unkonwn"}</Text>
         </View>
         <View style={styles.scanCom}>
           <Image
             source={{
-              uri: "https://images.unsplash.com/photo-1616911821230-b7ca42658b64?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8ZmllbGRzfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60",
+              uri: logo_url,
             }}
             style={styles.imgshow}
           />
         </View>
-        <Text style={styles.descttit}>Company Note</Text>
-        <Text style={styles.desc}>
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen book.
-        </Text>
+        <>
+          <Text style={styles.descttit}>Company Note</Text>
+          <Text style={styles.desc}>
+            {status === "RECOMMENDED" && mynotesrecom}
+            {(status === "CANNOT_RECOMMEND" || status === "MIXED") && common}
+          </Text>
+        </>
         <Text style={styles.descttit}>Take Actions</Text>
 
         <Text style={styles.desc}>
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen book.
+          {status === "RECOMMENDED" && recomandtxt}
+          {status === "CANNOT_RECOMMEND" && notRecomadtext}
+          {status === "MIXED" && mixedtxt}
         </Text>
-        {status !== "NR" && <SharetoLink content="1" />}
+        {status === "RECOMMENDED" && <SharetoLink content="1" />}
         <SharetoLink content="2" />
         <SharetoLink content="3" />
       </ScrollView>
@@ -79,13 +96,17 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   scanCom: {
-    width: "100%",
-    height: h("45%"),
-    backgroundColor: "black",
+    width: w("65%"),
+    height: w("65%"),
+    backgroundColor: screenbg,
     marginBottom: h("2%"),
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
   },
   status: {
-    height: h("4%"),
+    height: h("6%"),
     width: "50%",
     backgroundColor: "brown",
     borderRadius: h("1%"),
@@ -97,7 +118,7 @@ const styles = StyleSheet.create({
     marginVertical: h("4%"),
   },
   statusTxt: {
-    fontSize: h("2.2%"),
+    fontSize: h("2%"),
     fontWeight: "bold",
     color: screenbg,
   },
@@ -119,9 +140,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   imgshow: {
-    width: "100%",
-    height: "100%",
-    resizeMode: "cover",
+    width: w("50%"),
+    height: w("50%"),
+    resizeMode: "contain",
   },
   safediv: { width: "100%", height: "100%", backgroundColor: screenbg },
   scrolldiv: { width: "100%", paddingBottom: h("2.5%") },

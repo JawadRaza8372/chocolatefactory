@@ -1,3 +1,82 @@
+// import ScreenHeader from "../Components/ScreenHeader";
+// import {
+//   StyleSheet,
+//   Text,
+//   View,
+//   SafeAreaView,
+//   ScrollView,
+//   Image,
+// } from "react-native";
+// import { w, h } from "react-native-responsiveness";
+// import React, { useState } from "react";
+// import { AntDesign } from "@expo/vector-icons";
+// import { mainColor, screenbg } from "../AppColors";
+// import CustomButton from "../Components/CustomButton";
+// const AboutUs = ({ navigation }) => {
+//   // https://foodispower.org
+//   // https://food-empowerment-project.networkforgood.com/projects/11476-f-e-p
+//   const desx =
+//     "Food Empowerment Project is a vegan food justice organization that believes in the power of one's food choices.";
+//   const next =
+//     "We promote veganism as a means to eliminate the suffering of non-human animals, work in solidarity with farm workers advocating for corporate and regulatory changes and also coordinate an annual school supply for the children of farm workers, we work on access to healthy foods in communities of color and low-income communities and we work to encourage people to not buy chocolate sourced from the worst forms of child labor, including slavery.";
+//   const resa =
+//     "As a small non-profit organization, we appreciate any donations to  help support our work.";
+//   return (
+//     <SafeAreaView
+//       style={{ width: "100%", height: "100%", backgroundColor: screenbg }}
+//     >
+//       <ScreenHeader
+//         isMenuButton={true}
+//         title={"About Us"}
+//         onPressFun={() => navigation.toggleDrawer()}
+//       />
+//       <ScrollView contentContainerStyle={{ width: "100%" }}>
+//         <View style={styles.scanCom}>
+//           <Image
+//             source={require("../../assets/empowe.png")}
+//             style={styles.imgshow}
+//           />
+//         </View>
+//         <Text style={styles.desc}>{desx}</Text>
+//         <Text style={styles.desc}>{next}</Text>
+//         <Text style={styles.desc}>{resa}</Text>
+//       </ScrollView>
+//     </SafeAreaView>
+//   );
+// };
+
+// export default AboutUs;
+
+// const styles = StyleSheet.create({
+//   scanCom: {
+//     width: "100%",
+//     height: h("45%"),
+//     marginBottom: h("2%"),
+//     display: "flex",
+//     alignItems: "center",
+//     justifyContent: "center",
+//   },
+//   imgshow: {
+//     width: "80%",
+//     height: "80%",
+//     resizeMode: "contain",
+//   },
+//   desc: {
+//     fontSize: h("2.5%"),
+//     width: "90%",
+//     alignSelf: "center",
+//     marginBottom: h("3%"),
+//   },
+//   title: {
+//     fontSize: h("2.8%"),
+//     width: "90%",
+//     alignSelf: "center",
+//     marginVertical: h("3%"),
+//     textAlign: "center",
+//     color: mainColor,
+//     fontWeight: "bold",
+//   },
+// });
 import ScreenHeader from "../Components/ScreenHeader";
 import React, { useState } from "react";
 import {

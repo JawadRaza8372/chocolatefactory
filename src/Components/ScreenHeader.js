@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   screenTitle: {
-    fontSize: h("3.3%"),
+    fontSize: h("2.2%"),
     fontWeight: "900",
     color: screenbg,
   },

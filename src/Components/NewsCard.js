@@ -17,8 +17,11 @@ const NewsCard = ({ bgColor, onClickf }) => {
           { backgroundColor: bgColor ? bgColor : "rgba(0,0,0,0.6)" },
         ]}
       >
-        <Text style={styles.headtxt}>NewsCard</Text>
-        <Text style={styles.desc}>NewsCard</Text>
+        <Text style={styles.headtxt}>Understanding the Chocolate List</Text>
+        <Text style={styles.desc}>
+          Food Empowerment Project (F.E.P.) publishes a list of companies that
+          sell chocolates that we do and do not recommend.{" "}
+        </Text>
       </View>
     </TouchableOpacity>
   );
@@ -28,9 +31,9 @@ export default NewsCard;
 
 const styles = StyleSheet.create({
   newsCard: {
-    width: w("75%"),
+    width: w("93%"),
     height: h("20%"),
-    marginRight: w("5%"),
+    alignSelf: "center",
     position: "relative",
     borderRadius: h("3%"),
     overflow: "hidden",

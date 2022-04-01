@@ -11,7 +11,7 @@ const ScanComp = () => {
       : status === "NR"
       ? "red"
       : status === "M"
-      ? "yellow"
+      ? "gold"
       : "black";
   const statustxt =
     status === "R"
