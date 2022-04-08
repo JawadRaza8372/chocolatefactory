@@ -92,6 +92,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { w, h } from "react-native-responsiveness";
 import { mainColor, screenbg } from "../AppColors";
 import CustomButton from "../Components/CustomButton";
+import { AboutUrl, donateUrl } from "../Components/SendMailComp";
 const Donate = ({ navigation }) => {
   const splashData = [
     {
@@ -176,7 +177,9 @@ const Donate = ({ navigation }) => {
                   </View>
                   <CustomButton
                     title={item.key === 6 ? "Donate" : "Learn More"}
-                    onClick={() => navigation.navigate("Donate")}
+                    onClick={() => {
+                      item.key === 6 ? donateUrl() : AboutUrl();
+                    }}
                   />
                 </View>
               </>

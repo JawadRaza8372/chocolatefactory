@@ -15,6 +15,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { w, h } from "react-native-responsiveness";
 import { mainColor, screenbg } from "../AppColors";
 import CustomButton from "../Components/CustomButton";
+import { sendclick } from "../Components/SendMailComp";
 const Donate = ({ navigation }) => {
   const donationsAmount = [
     { title: "$10" },
@@ -53,10 +54,7 @@ const Donate = ({ navigation }) => {
             </TouchableOpacity>
           ))}
         </View>
-        <CustomButton
-          title={"Donate"}
-          onPressFun={() => console.log("donate")}
-        />
+        <CustomButton title={"Donate"} onClick={() => sendclick()} />
       </ScrollView>
     </SafeAreaView>
   );
@@ -132,9 +130,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   imgshow: {
-    width: w("100%"),
-    height: h("35%"),
+    width: w("70%"),
+    height: h("23%"),
     resizeMode: "cover",
+    alignSelf: "center",
   },
   dispdont: {
     // width: "100%",
