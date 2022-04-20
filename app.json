@@ -1,35 +1,32 @@
 {
   "expo": {
-    "name": "chocofactry",
+    "name": "Choclate List App",
     "slug": "chocofactry",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/applogo.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/splashh.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/splashh.png",
         "backgroundColor": "#FFFFFF"
       }
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": [
-      "expo-barcode-scanner"
-    ]
+    "plugins": ["expo-barcode-scanner"],
+    "permissions": ["CAMERA"]
   }
 }

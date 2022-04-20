@@ -24,6 +24,26 @@ const ContactUs = ({ navigation }) => {
     email: "",
     message: "",
   });
+  const onSubmitf = () => {
+    if (formData.subject.length > 4) {
+      if (formData.name.length > 4) {
+        if (formData.email.length > 4) {
+          if (formData.message.length > 10) {
+            contactUs(formData);
+          } else {
+            alert("Please enter a valid suggestion or complaint");
+          }
+        } else {
+          alert("Please enter valid email of atleast 5 letters");
+        }
+      } else {
+        alert("Please enter valid name of atleast 5 letters");
+      }
+    } else {
+      alert("Please enter valid subject of atleast 5 letters");
+    }
+  };
+
   return (
     <SafeAreaView style={{ width: "100%", height: "100%" }}>
       <ScreenHeader
@@ -101,7 +121,7 @@ const ContactUs = ({ navigation }) => {
               })
             }
           />
-          <CustomButton title="Send" onClick={() => contactUs(formData)} />
+          <CustomButton title="Send" onClick={onSubmitf} />
         </ScrollView>
       </KeyboardAwareScrollView>
     </SafeAreaView>

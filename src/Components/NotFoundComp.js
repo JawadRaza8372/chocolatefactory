@@ -13,6 +13,25 @@ const NotFoundComp = () => {
     socialMedia: "",
     anything: "",
   });
+  const onSubmitf = () => {
+    if (formData.companyName.length > 4) {
+      if (formData.website.length > 4) {
+        if (formData.socialMedia.length > 4) {
+          if (formData.anything.length > 0) {
+            AddProduct(formData);
+          } else {
+            alert("Please enter data in Anything field");
+          }
+        } else {
+          alert("Please enter valid Social Media link of atleast 5 letters");
+        }
+      } else {
+        alert("Please enter valid website link of atleast 5 letters");
+      }
+    } else {
+      alert("Please enter valid company name of atleast 5 letters");
+    }
+  };
   return (
     <KeyboardAwareScrollView>
       <View style={styles.mnbg}>
@@ -71,10 +90,7 @@ const NotFoundComp = () => {
             })
           }
         />
-        <TouchableOpacity
-          onPress={() => AddProduct(formData)}
-          style={styles.customBt}
-        >
+        <TouchableOpacity onPress={onSubmitf} style={styles.customBt}>
           <Text style={styles.btntxt}>Send</Text>
         </TouchableOpacity>
       </View>

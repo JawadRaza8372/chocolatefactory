@@ -26,6 +26,7 @@ const SetAsFvrt = ({ name }) => {
     ) {
       dispatch(setFeatures({ features: JSON.parse(jsonValue1) }));
     }
+    alert("Added as favrote");
   };
   return (
     <TouchableOpacity onPress={savedata}>
