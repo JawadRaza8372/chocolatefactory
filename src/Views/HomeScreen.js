@@ -35,9 +35,6 @@ const HomeScreen = ({ navigation }) => {
         choclateList &&
         choclateList?.filter((data) => selected === data?.status);
       setchocoItems(filtered);
-      console.log(filtered.length);
-      console.log(selected);
-      console.log(choclateList.length);
     } else {
       setchocoItems(choclateList);
     }

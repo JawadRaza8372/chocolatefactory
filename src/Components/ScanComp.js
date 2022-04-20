@@ -50,18 +50,12 @@ const ScanComp = () => {
     const itemDet3 = await axios.get(`https://barcode.monster/api/${code}`, {
       headers: { "User-Agent": "Chocolate List App", Version: "1.0" },
     });
-    // console.log("checking=>", itemDet3);
-    // const itemDet2 = await axios.get(
-    //   `https://world.openfoodfacts.org/api/v0/product/${code}.json`
-    // );
-    // console.log("checking==>", itemDet2);
     if (itemDet3.data.status === "not found" || !itemDet3.data.company) {
       const itemDet2 = await axios.get(
         `https://world.openfoodfacts.org/api/v0/product/${codeRes}.json`,
         { headers: { "User-Agent": "Chocolate List App", Version: "1.0" } }
       );
       if (itemDet2.data.status === 0) {
-        console.log("product not found");
         setproductNotFound(true);
       } else {
         setcodeRes(itemDet2.data.product_name);
@@ -75,7 +69,7 @@ const ScanComp = () => {
       fetchItemDetail();
     }
   }, [codeRes]);
-
+  console.log("checking", codeRes);
   if (hasPermission === null) {
     return <Text>Requesting for camera permission</Text>;
   }
@@ -85,53 +79,59 @@ const ScanComp = () => {
   const checkingrenders = () => {
     if (codeRes) {
       // name, status, logo_url
-      const product = choclateList.filter((dat) => dat.name === codeRes);
-      const statusBg =
-        product.status === "RECOMMENDED"
-          ? "green"
-          : product.status === "CANNOT_RECOMMEND"
-          ? "red"
-          : product.status === "MIXED"
-          ? "gold"
-          : "black";
-      const recomandtxt = ` Thank ${product.name} for not using Chocolate\nfrom some of the worse areas with Child Slavery.`;
-      const recomandMsg = `I am very Thank to  ${product.name}  for not using Chocolate\nfrom some of the worse areas with Child Slavery.`;
-      const notRecomadMsg = `I am here to inform  ${product.name}  that i won’t be buy from\nthem until they agree to not using\nChocolate from some of the worst ares with Child Slavery.`;
-
-      const notRecomadtext = `Inform ${product.name} that you won’t be buying from\nthem until they agree to not using\nChocolate from some of the worst ares with Child Slavery.`;
-      const mixedtxt = `Inform ${product.name} that you won’t be buying from\nthem until they agree to not using\nChocolate from some of the worst ares with Child Slavery.`;
-      const mynotesrecom = `Company Responded & Veriﬁed Chocolate\nis not sourced from some of the worse areas\nwith Child Slavery`;
-      let textdec =
-        product.status === "RECOMMENDED"
-          ? recomandtxt
-          : product.status === "CANNOT_RECOMMEND"
-          ? notRecomadtext
-          : product.status === "MIXED"
-          ? mixedtxt
-          : "";
-      let textmsg =
-        product.status === "RECOMMENDED"
-          ? recomandMsg
-          : product.status === "CANNOT_RECOMMEND"
-          ? notRecomadMsg
-          : product.status === "MIXED"
-          ? notRecomadMsg
-          : "";
-
-      return (
-        <>
-          <Text style={styles.compName}>{product.name}</Text>
-          <View style={{ ...styles.status, backgroundColor: statusBg }}>
-            <Text style={styles.statusTxt}>{product.status}</Text>
-          </View>
-          <Text style={styles.desc}>{textdec}</Text>
-          {product.status === "RECOMMENDED" && (
-            <SetAsfvrt name={product.name} />
-          )}
-          <TweetSharComp nowText={textmsg} />
-          <FbShareComp nowText={textmsg} />
-        </>
+      const product = choclateList.filter(
+        (dat) => dat.name === codeRes || dat.name.includes(codeRes)
       );
+      if (product.length > 0) {
+        const statusBg =
+          product[0].status === "RECOMMENDED"
+            ? "green"
+            : product[0].status === "CANNOT_RECOMMEND"
+            ? "red"
+            : product[0].status === "MIXED"
+            ? "gold"
+            : "black";
+        const recomandtxt = ` Thank ${product[0].name} for not using Chocolate\nfrom some of the worse areas with Child Slavery.`;
+        const recomandMsg = `I am very Thank to  ${product[0].name}  for not using Chocolate\nfrom some of the worse areas with Child Slavery.`;
+        const notRecomadMsg = `I am here to inform  ${product[0].name}  that i won’t be buy from\nthem until they agree to not using\nChocolate from some of the worst ares with Child Slavery.`;
+
+        const notRecomadtext = `Inform ${product[0].name} that you won’t be buying from\nthem until they agree to not using\nChocolate from some of the worst ares with Child Slavery.`;
+        const mixedtxt = `Inform ${product[0].name} that you won’t be buying from\nthem until they agree to not using\nChocolate from some of the worst ares with Child Slavery.`;
+        const mynotesrecom = `Company Responded & Veriﬁed Chocolate\nis not sourced from some of the worse areas\nwith Child Slavery`;
+        let textdec =
+          product[0].status === "RECOMMENDED"
+            ? recomandtxt
+            : product[0].status === "CANNOT_RECOMMEND"
+            ? notRecomadtext
+            : product[0].status === "MIXED"
+            ? mixedtxt
+            : "";
+        let textmsg =
+          product[0].status === "RECOMMENDED"
+            ? recomandMsg
+            : product[0].status === "CANNOT_RECOMMEND"
+            ? notRecomadMsg
+            : product[0].status === "MIXED"
+            ? notRecomadMsg
+            : "";
+
+        return (
+          <>
+            <Text style={styles.compName}>{product[0].name}</Text>
+            <View style={{ ...styles.status, backgroundColor: statusBg }}>
+              <Text style={styles.statusTxt}>{product[0].status}</Text>
+            </View>
+            <Text style={styles.desc}>{textdec}</Text>
+            {product[0].status === "RECOMMENDED" && (
+              <SetAsfvrt name={product[0].name} />
+            )}
+            <TweetSharComp nowText={textmsg} />
+            <FbShareComp nowText={textmsg} />
+          </>
+        );
+      } else {
+        return <NotFoundComp />;
+      }
     } else {
       if (productNotFound) {
         return <NotFoundComp />;
