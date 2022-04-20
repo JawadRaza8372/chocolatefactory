@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   choclateList: null,
-  features: null,
+  features: [],
   lastupdate: null,
 };
 
@@ -12,7 +12,7 @@ export const projectSlice = createSlice({
   reducers: {
     setFeatures: (state, action) => {
       if (action.payload.features === null) {
-        state.features = null;
+        state.features = [];
       } else {
         state.features = action.payload.features;
       }

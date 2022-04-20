@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { BarCodeScanner } from "expo-barcode-scanner";
-
+import SetAsfvrt from "./SetAsFvrt";
 import { w, h } from "react-native-responsiveness";
 import { screenbg } from "../AppColors";
 import SharetoLink from "./SharetoLink";
@@ -94,12 +94,12 @@ const ScanComp = () => {
           : product.status === "MIXED"
           ? "gold"
           : "black";
-      const recomandtxt = ` Thank ${name} for not using Chocolate\nfrom some of the worse areas with Child Slavery.`;
-      const recomandMsg = `I am very Thank to  ${name}  for not using Chocolate\nfrom some of the worse areas with Child Slavery.`;
-      const notRecomadMsg = `I am here to inform  ${name}  that i won’t be buy from\nthem until they agree to not using\nChocolate from some of the worst ares with Child Slavery.`;
+      const recomandtxt = ` Thank ${product.name} for not using Chocolate\nfrom some of the worse areas with Child Slavery.`;
+      const recomandMsg = `I am very Thank to  ${product.name}  for not using Chocolate\nfrom some of the worse areas with Child Slavery.`;
+      const notRecomadMsg = `I am here to inform  ${product.name}  that i won’t be buy from\nthem until they agree to not using\nChocolate from some of the worst ares with Child Slavery.`;
 
-      const notRecomadtext = `Inform ${name} that you won’t be buying from\nthem until they agree to not using\nChocolate from some of the worst ares with Child Slavery.`;
-      const mixedtxt = `Inform ${name} that you won’t be buying from\nthem until they agree to not using\nChocolate from some of the worst ares with Child Slavery.`;
+      const notRecomadtext = `Inform ${product.name} that you won’t be buying from\nthem until they agree to not using\nChocolate from some of the worst ares with Child Slavery.`;
+      const mixedtxt = `Inform ${product.name} that you won’t be buying from\nthem until they agree to not using\nChocolate from some of the worst ares with Child Slavery.`;
       const mynotesrecom = `Company Responded & Veriﬁed Chocolate\nis not sourced from some of the worse areas\nwith Child Slavery`;
       let textdec =
         product.status === "RECOMMENDED"
@@ -125,7 +125,9 @@ const ScanComp = () => {
             <Text style={styles.statusTxt}>{product.status}</Text>
           </View>
           <Text style={styles.desc}>{textdec}</Text>
-          {product.status === "RECOMMENDED" && <SharetoLink content="1" />}
+          {product.status === "RECOMMENDED" && (
+            <SetAsfvrt name={product.name} />
+          )}
           <TweetSharComp nowText={textmsg} />
           <FbShareComp nowText={textmsg} />
         </>

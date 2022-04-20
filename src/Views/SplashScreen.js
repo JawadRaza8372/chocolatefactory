@@ -4,6 +4,7 @@ import { w, h } from "react-native-responsiveness";
 import { screenbg } from "../AppColors";
 import { useDispatch } from "react-redux";
 import { setChocoList, setFeatures, setUpdate } from "../store/projectSlice";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 const SplashScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -15,12 +16,28 @@ const SplashScreen = ({ navigation }) => {
     const mydata = checkinggs.data;
     if (mydata) {
       dispatch(setChocoList({ choclateList: mydata.companies }));
-      dispatch(setFeatures({ features: mydata.features }));
       dispatch(setUpdate({ lastupdate: mydata.last_updated }));
+    }
+  };
+  const fetchingAsyncData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem("chocFavrt");
+      if (
+        jsonValue !== null &&
+        jsonValue !== "" &&
+        jsonValue !== {} &&
+        jsonValue !== undefined &&
+        jsonValue !== "underfined"
+      ) {
+        dispatch(setFeatures({ features: JSON.parse(jsonValue) }));
+      }
+    } catch (e) {
+      // error reading value
     }
   };
   useEffect(() => {
     fetchingData();
+    fetchingAsyncData();
   }, []);
   useEffect(() => {
     setTimeout(() => {

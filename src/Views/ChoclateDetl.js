@@ -16,6 +16,9 @@ import SharetoLink from "../Components/SharetoLink";
 import ScreenHeader from "../Components/ScreenHeader";
 import FbShareComp from "../Components/FbShareComp";
 import TweetSharComp from "../Components/TweetSharComp";
+import SetAsFvrt from "../Components/SetAsFvrt";
+import { useSelector } from "react-redux";
+import { AntDesign } from "@expo/vector-icons";
 const ChoclateDetl = ({ route, navigation }) => {
   const { data } = route.params;
   const { name, status, logo_url } = data;
@@ -67,28 +70,10 @@ const ChoclateDetl = ({ route, navigation }) => {
       : status === "MIXED"
       ? notRecomadMsg
       : "";
-  const fbshare = async () => {
-    const res = await Share.share({ title: "t", message: "hy", url: "hhh" });
-    console.log(res);
-    // Share.sharedAction()
-  };
-  const postOnFacebook = () => {
-    let facebookParameters = [];
-    //  if (facebookShareURL)
-    // if (postContent)
-    // facebookParameters.push("u=" + encodeURI("https://foodispower.org"));
 
-    // facebookParameters.push("quote=" + encodeURI("title"));
-    Linking.openURL("fb://sharer");
-    // const url = `https://web.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fparse.com&quote=${textmsg}&_rdc=1&_rdr`;
-    // Linking.openURL(url)
-    //   .then((data) => {
-    //     alert("Facebook Opened");
-    //   })
-    //   .catch(() => {
-    //     alert("Something went wrong");
-    //   });
-  };
+  const { features } = useSelector((state) => state.project);
+  const check = features && features?.filter((dat) => dat.name === name);
+  console.log("checking", features, typeof features, check.length);
   return (
     <SafeAreaView style={styles.safediv}>
       <ScreenHeader
@@ -98,11 +83,25 @@ const ChoclateDetl = ({ route, navigation }) => {
       <ScrollView contentContainerStyle={styles.scrolldiv}>
         <View
           style={{
-            ...styles.status,
-            backgroundColor: statusBg ? statusBg : "black",
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-evenly",
+            flexDirection: "row",
+            alignSelf: "center",
           }}
         >
-          <Text style={styles.statusTxt}>{status ? status : "Unkonwn"}</Text>
+          <View
+            style={{
+              ...styles.status,
+              backgroundColor: statusBg ? statusBg : "black",
+            }}
+          >
+            <Text style={styles.statusTxt}>{status ? status : "Unkonwn"}</Text>
+          </View>
+          {check.length > 0 && (
+            <AntDesign name="heart" size={h("4%")} color="red" />
+          )}
         </View>
         <View style={styles.scanCom}>
           <Image
@@ -122,7 +121,7 @@ const ChoclateDetl = ({ route, navigation }) => {
         <Text style={styles.descttit}>Take Actions</Text>
 
         <Text style={styles.desc}>{textdec}</Text>
-        {status === "RECOMMENDED" && <SharetoLink content="1" />}
+        {status === "RECOMMENDED" && <SetAsFvrt name={name} />}
         <TweetSharComp nowText={textmsg} />
         <FbShareComp nowText={textmsg} />
       </ScrollView>
