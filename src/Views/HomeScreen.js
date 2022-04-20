@@ -109,7 +109,17 @@ const HomeScreen = ({ navigation }) => {
       <SafeAreaView style={styles.bgdiv}>
         <ScreenHeader
           isMenuButton
-          title={"All Companies"}
+          title={
+            selected === "All"
+              ? "All"
+              : selected === "RECOMMENDED"
+              ? "Recomanded"
+              : selected === "CANNOT_RECOMMEND"
+              ? "Not Recomanded"
+              : selected === "MIXED"
+              ? "Mixed"
+              : ""
+          }
           onPressFun={() => navigation.toggleDrawer()}
           scanbtn
           onPressFunScan={() => navigation.navigate("SrchScnScreen")}

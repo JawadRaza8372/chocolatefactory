@@ -93,7 +93,7 @@ import { w, h } from "react-native-responsiveness";
 import { mainColor, screenbg } from "../AppColors";
 import CustomButton from "../Components/CustomButton";
 import { AboutUrl, donateUrl } from "../Components/SendMailComp";
-const Donate = ({ navigation }) => {
+const AboutUs = ({ navigation }) => {
   const splashData = [
     {
       key: 1,
@@ -191,7 +191,7 @@ const Donate = ({ navigation }) => {
   );
 };
 
-export default Donate;
+export default AboutUs;
 
 const styles = StyleSheet.create({
   textCont: {

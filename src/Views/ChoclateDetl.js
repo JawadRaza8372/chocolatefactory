@@ -5,12 +5,17 @@ import {
   View,
   ScrollView,
   Image,
+  TouchableOpacity,
+  Linking,
+  Share,
 } from "react-native";
 import React from "react";
 import { screenbg } from "../AppColors";
 import { w, h } from "react-native-responsiveness";
 import SharetoLink from "../Components/SharetoLink";
 import ScreenHeader from "../Components/ScreenHeader";
+import FbShareComp from "../Components/FbShareComp";
+import TweetSharComp from "../Components/TweetSharComp";
 const ChoclateDetl = ({ route, navigation }) => {
   const { data } = route.params;
   const { name, status, logo_url } = data;
@@ -35,6 +40,9 @@ const ChoclateDetl = ({ route, navigation }) => {
       ? "gold"
       : "black";
   const recomandtxt = ` Thank ${name} for not using Chocolate\nfrom some of the worse areas with Child Slavery.`;
+  const recomandMsg = `I am very Thank to  ${name}  for not using Chocolate\nfrom some of the worse areas with Child Slavery.`;
+  const notRecomadMsg = `I am here to inform  ${name}  that i won’t be buy from\nthem until they agree to not using\nChocolate from some of the worst ares with Child Slavery.`;
+
   const notRecomadtext = `Inform ${name} that you won’t be buying from\nthem until they agree to not using\nChocolate from some of the worst ares with Child Slavery.`;
   const mixedtxt = `Inform ${name} that you won’t be buying from\nthem until they agree to not using\nChocolate from some of the worst ares with Child Slavery.`;
   const mynotesrecom = `Company Responded & Veriﬁed Chocolate\nis not sourced from some of the worse areas\nwith Child Slavery`;
@@ -43,6 +51,44 @@ const ChoclateDetl = ({ route, navigation }) => {
   }sources ${
     status === "MIXED" ? "some of it's " : ""
   } cocao from some of the \nworst areas of Child Slavery`;
+  let textdec =
+    status === "RECOMMENDED"
+      ? recomandtxt
+      : status === "CANNOT_RECOMMEND"
+      ? notRecomadtext
+      : status === "MIXED"
+      ? mixedtxt
+      : "";
+  let textmsg =
+    status === "RECOMMENDED"
+      ? recomandMsg
+      : status === "CANNOT_RECOMMEND"
+      ? notRecomadMsg
+      : status === "MIXED"
+      ? notRecomadMsg
+      : "";
+  const fbshare = async () => {
+    const res = await Share.share({ title: "t", message: "hy", url: "hhh" });
+    console.log(res);
+    // Share.sharedAction()
+  };
+  const postOnFacebook = () => {
+    let facebookParameters = [];
+    //  if (facebookShareURL)
+    // if (postContent)
+    // facebookParameters.push("u=" + encodeURI("https://foodispower.org"));
+
+    // facebookParameters.push("quote=" + encodeURI("title"));
+    Linking.openURL("fb://sharer");
+    // const url = `https://web.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fparse.com&quote=${textmsg}&_rdc=1&_rdr`;
+    // Linking.openURL(url)
+    //   .then((data) => {
+    //     alert("Facebook Opened");
+    //   })
+    //   .catch(() => {
+    //     alert("Something went wrong");
+    //   });
+  };
   return (
     <SafeAreaView style={styles.safediv}>
       <ScreenHeader
@@ -75,14 +121,10 @@ const ChoclateDetl = ({ route, navigation }) => {
         </>
         <Text style={styles.descttit}>Take Actions</Text>
 
-        <Text style={styles.desc}>
-          {status === "RECOMMENDED" && recomandtxt}
-          {status === "CANNOT_RECOMMEND" && notRecomadtext}
-          {status === "MIXED" && mixedtxt}
-        </Text>
+        <Text style={styles.desc}>{textdec}</Text>
         {status === "RECOMMENDED" && <SharetoLink content="1" />}
-        <SharetoLink content="2" />
-        <SharetoLink content="3" />
+        <TweetSharComp nowText={textmsg} />
+        <FbShareComp nowText={textmsg} />
       </ScrollView>
     </SafeAreaView>
   );

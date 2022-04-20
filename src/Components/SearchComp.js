@@ -13,6 +13,7 @@ import { mainColor, screenbg } from "../AppColors";
 import ItemCard from "./ItemCard";
 import { useSelector } from "react-redux";
 import { KeyboardAwareScrollView } from "@codler/react-native-keyboard-aware-scroll-view";
+import NotFoundComp from "./NotFoundComp";
 
 const SearchComp = ({ searchtxt, onClick }) => {
   const [chocoItems, setchocoItems] = useState([]);
@@ -34,37 +35,9 @@ const SearchComp = ({ searchtxt, onClick }) => {
     searchfun();
   }, [searchtxt]);
 
-  const msg = "Can't find the vega choclate\nBrand you are looking for!";
   const rendringComp = () => {
     if (chocoItems.length === 0 && searchtxt) {
-      return (
-        <KeyboardAwareScrollView>
-          <View style={styles.mnbg}>
-            <Text style={styles.nores}>No result found</Text>
-            <Text style={styles.msgtxt}>{msg}</Text>
-            <Text style={styles.desc}>Let u know and we will reach out.</Text>
-            <CustomLabldInput
-              title={"Choclate Company Name"}
-              placeholder="Enter Company Name"
-            />
-            <CustomLabldInput
-              title={"Website"}
-              placeholder="Enter Website Link"
-            />
-            <CustomLabldInput
-              title={"Social Media"}
-              placeholder="Social Media Link"
-            />
-            <CustomLabldInput
-              title={"Anything Else"}
-              placeholder="Something Else"
-            />
-            <TouchableOpacity style={styles.customBt}>
-              <Text style={styles.btntxt}>Send</Text>
-            </TouchableOpacity>
-          </View>
-        </KeyboardAwareScrollView>
-      );
+      return <NotFoundComp />;
     } else if (chocoItems && searchtxt) {
       return (
         <FlatList

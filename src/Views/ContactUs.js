@@ -7,7 +7,7 @@ import {
   Image,
   TextInput,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import ScreenHeader from "../Components/ScreenHeader";
 import { mainColor, screenbg } from "../AppColors";
 import { w, h } from "react-native-responsiveness";
@@ -15,8 +15,15 @@ import CustomButton from "../Components/CustomButton";
 import CustomLabldInput from "../Components/CustomLabldInput";
 import CustomLabldInpPara from "../Components/CustomLabldInpPara";
 import { Entypo } from "@expo/vector-icons";
+import { contactUs } from "../Components/SendMailComp";
 import { KeyboardAwareScrollView } from "@codler/react-native-keyboard-aware-scroll-view";
 const ContactUs = ({ navigation }) => {
+  const [formData, setformData] = useState({
+    subject: "",
+    name: "",
+    email: "",
+    message: "",
+  });
   return (
     <SafeAreaView style={{ width: "100%", height: "100%" }}>
       <ScreenHeader
@@ -37,15 +44,64 @@ const ContactUs = ({ navigation }) => {
               <Text style={styles.txt}>Contact Us</Text>
             </View>
           </View>
-          <Text style={styles.optionslabl}>Subject</Text>
-          <View style={styles.options}>
+          {/* <Text style={styles.optionslabl}>Subject</Text> */}
+          {/* <View style={styles.options}>
             <Text>Genral</Text>
             <Entypo name="chevron-right" size={h("4%")} color={"black"} />
-          </View>
-          <CustomLabldInput title="Name" placeholder="Your Name" />
-          <CustomLabldInput title="Email" placeholder="Your Email" />
-          <CustomLabldInpPara title="Message" placeholder="Your Message" />
-          <CustomButton title="Send" onClick={() => console.log("send")} />
+          </View> */}
+          <CustomLabldInput
+            title="Subject"
+            placeholder="General"
+            value={formData.subject}
+            textchange={(text) =>
+              setformData((prevalue) => {
+                return {
+                  ...prevalue,
+                  subject: text,
+                };
+              })
+            }
+          />
+          <CustomLabldInput
+            title="Name"
+            placeholder="Your Name"
+            value={formData.name}
+            textchange={(text) =>
+              setformData((prevalue) => {
+                return {
+                  ...prevalue,
+                  name: text,
+                };
+              })
+            }
+          />
+          <CustomLabldInput
+            title="Email"
+            placeholder="Your Email"
+            value={formData.email}
+            textchange={(text) =>
+              setformData((prevalue) => {
+                return {
+                  ...prevalue,
+                  email: text,
+                };
+              })
+            }
+          />
+          <CustomLabldInpPara
+            title="Message"
+            placeholder="Your Message"
+            value={formData.message}
+            textchange={(text) =>
+              setformData((prevalue) => {
+                return {
+                  ...prevalue,
+                  message: text,
+                };
+              })
+            }
+          />
+          <CustomButton title="Send" onClick={() => contactUs(formData)} />
         </ScrollView>
       </KeyboardAwareScrollView>
     </SafeAreaView>
@@ -57,7 +113,7 @@ export default ContactUs;
 const styles = StyleSheet.create({
   scanCom: {
     width: w("100%"),
-    height: h("35%"),
+    height: h("24%"),
     marginBottom: h("2%"),
     display: "flex",
     alignItems: "center",

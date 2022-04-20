@@ -1,7 +1,11 @@
 import { StyleSheet, Text, View, Linking } from "react-native";
 import React from "react";
 import qs from "qs";
+// Also... if relevant could you please send a User-Agent
+//  HTTP Header with the name of the app / service querying,
+//   the version, system and an URL, so that you are not blocked by mistake.
 
+// Example: User-Agent: Chocolate List App - Android - Version 1.0 - https://foodispower.org
 const sendEmail = async (to, subject, body, options = {}) => {
   const { cc, bcc } = options;
 
@@ -31,7 +35,6 @@ const sendEmail = async (to, subject, body, options = {}) => {
   return Linking.openURL(url);
 };
 const sendclick = () => {
-  console.log("started");
   const check = sendEmail(
     "info@foodispower.org",
     "I would like to",
@@ -44,12 +47,11 @@ const sendclick = () => {
 
   return check;
 };
-const ContactUs = () => {
-  console.log("started");
+const contactUs = (data) => {
   const check = sendEmail(
     "info@foodispower.org",
     "I would like to discuss/report an issue/suggestion.",
-    "Details:",
+    `Details:\nSubject:${data.subject}\nCustomer Name:${data.name}\nCustomer Email:${data.email}\nMessage:${data.message}`,
     { cc: "info@foodispower.org" }
   ).then(() => {
     console.log("Your message was successfully sent!");
@@ -58,12 +60,13 @@ const ContactUs = () => {
 
   return check;
 };
-const AddProduct = () => {
+const AddProduct = (data) => {
   console.log("started");
+
   const check = sendEmail(
     "info@foodispower.org",
     "I would like to suggest to add this brand in your list",
-    "Brand Details:",
+    `Brand Details:\nName:${data.companyName}\nWebsite link:${data.website}\nSocial Media Link:${data.socialMedia}\nOther:${data.anything}`,
     { cc: "info@foodispower.org" }
   ).then(() => {
     console.log("Your message was successfully sent!");
@@ -78,7 +81,7 @@ const donateUrl = async () => {
 const AboutUrl = async () => {
   await Linking.openURL("https://foodispower.org/mission-and-values/");
 };
-export { sendclick, donateUrl, AboutUrl, ContactUs, AddProduct };
+export { sendclick, donateUrl, AboutUrl, contactUs, AddProduct };
 //     [8:55 am, 06/04/2022] Umer Aftab 2 Uol: 1. We can have this info go to info@foodispower.org
 // 2. Same email for the contact page info@foodispower.org
 // 3. The donation place doesn’t have an API for this sort of stuff. So could we just have the donate links go to: https://foodispower.org/donate/
