@@ -79,9 +79,11 @@ const ScanComp = () => {
   const checkingrenders = () => {
     if (codeRes) {
       // name, status, logo_url
-      const product = choclateList.filter(
-        (dat) => dat.name === codeRes || dat.name.includes(codeRes)
-      );
+      const product = choclateList.filter((dat) => {
+        const newtitle = dat.name.toUpperCase();
+        const serchtext = codeRes.toUpperCase();
+        return newtitle === serchtext || newtitle.includes(serchtext);
+      });
       if (product.length > 0) {
         const statusBg =
           product[0].status === "RECOMMENDED"

@@ -6,6 +6,7 @@ export default function App() {
   LogBox.ignoreLogs([
     "SerializableStateInvariantMiddleware",
     "ImmutableStateInvariantMiddleware",
+    "VirtualizedLists should never be nested inside plain",
   ]);
 
   return (

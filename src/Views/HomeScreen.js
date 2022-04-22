@@ -92,7 +92,11 @@ const HomeScreen = ({ navigation }) => {
   const searchfun = () => {
     const newres =
       choclateList &&
-      choclateList.filter((data) => data.name.includes(`${searchtxt}`));
+      choclateList.filter((dat) => {
+        const newtitle = dat.name.toUpperCase();
+        const serchtext = searchtxt.toUpperCase();
+        return newtitle === serchtext || newtitle.includes(serchtext);
+      });
     if (newres) {
       setchocoItems(newres);
     }
@@ -136,46 +140,46 @@ const HomeScreen = ({ navigation }) => {
             onChangeText={(text) => setsearchtxt(text)}
           />
 
-          <NewsCard onClickf={() => navigation.navigate("newsDesc")} />
-
-          <HeaderInfo
-            title="CHOCOLATE LIST"
-            subtitle={"Last Updated:" + `${lastupdate}`}
-          >
-            <TouchableOpacity onPress={toggleModal} style={styles.flters}>
-              <View style={styles.minibtn}>
-                <Text>Filters</Text>
-                <AntDesign name="right" size={24} color="black" />
+          <ScrollView>
+            <NewsCard onClickf={() => navigation.navigate("newsDesc")} />
+            <HeaderInfo
+              title="CHOCOLATE LIST"
+              subtitle={"Last Updated:" + `${lastupdate}`}
+            >
+              <TouchableOpacity onPress={toggleModal} style={styles.flters}>
+                <View style={styles.minibtn}>
+                  <Text>Filters</Text>
+                  <AntDesign name="right" size={24} color="black" />
+                </View>
+                <View style={styles.selecteddiv}>
+                  <Text style={styles.statsTxt}>
+                    {selected === "All"
+                      ? "All"
+                      : selected === "RECOMMENDED"
+                      ? "Recomanded"
+                      : selected === "CANNOT_RECOMMEND"
+                      ? "Not Recomanded"
+                      : selected === "MIXED"
+                      ? "Mixed"
+                      : ""}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </HeaderInfo>
+            {choclateList && chocoItems && !isLoading ? (
+              <FlatList
+                data={chocoItems}
+                keyExtractor={(item) => item.name}
+                renderItem={({ item }) => (
+                  <ItemCard data={item} onClickF={itemonPress} />
+                )}
+              />
+            ) : (
+              <View style={styles.isLoading}>
+                <ActivityIndicator size="large" color={mainColor} />
               </View>
-              <View style={styles.selecteddiv}>
-                <Text style={styles.statsTxt}>
-                  {selected === "All"
-                    ? "All"
-                    : selected === "RECOMMENDED"
-                    ? "Recomanded"
-                    : selected === "CANNOT_RECOMMEND"
-                    ? "Not Recomanded"
-                    : selected === "MIXED"
-                    ? "Mixed"
-                    : ""}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </HeaderInfo>
-          {choclateList && chocoItems && !isLoading ? (
-            <FlatList
-              data={chocoItems}
-              keyExtractor={(item) => item.name}
-              renderItem={({ item }) => (
-                <ItemCard data={item} onClickF={itemonPress} />
-              )}
-            />
-          ) : (
-            <View style={styles.isLoading}>
-              <ActivityIndicator size="large" color={mainColor} />
-            </View>
-          )}
-          {/* </ScrollView> */}
+            )}
+          </ScrollView>
         </View>
         <CustomNavBtn
           data={data}

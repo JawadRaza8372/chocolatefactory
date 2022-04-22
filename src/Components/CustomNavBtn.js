@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   btns: {
-    width: w("18.5%"),
+    width: w("19%"),
     height: "80%",
     display: "flex",
     alignItems: "center",
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   active: {
-    backgroundColor: "black",
+    backgroundColor: "brown",
   },
   btntxt: {
     fontSize: h("2.4%"),

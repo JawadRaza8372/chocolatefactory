@@ -26,7 +26,11 @@ const SearchComp = ({ searchtxt, onClick }) => {
   const searchfun = () => {
     const newres =
       choclateList &&
-      choclateList.filter((data) => data.name.includes(`${searchtxt}`));
+      choclateList.filter((dat) => {
+        const newtitle = dat.name.toUpperCase();
+        const serchtext = searchtxt.toUpperCase();
+        return newtitle === serchtext || newtitle.includes(serchtext);
+      });
     if (newres) {
       setchocoItems(newres);
     }
