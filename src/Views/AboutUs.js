@@ -99,6 +99,9 @@ const AboutUs = ({ navigation }) => {
       key: 1,
       img: require("../../assets/empowe.png"),
       heading: "About",
+      onPressFun: () => {
+        AboutUrl("https://foodispower.org/");
+      },
       subheading:
         "Food Empowerment Project seeks to\ncreate a more just and sustainable\nworld by recognizing the power of\none’s food choices.",
     },
@@ -106,6 +109,10 @@ const AboutUs = ({ navigation }) => {
       key: 2,
       img: require("../../assets/cows.png"),
       heading: "Veganism",
+      onPressFun: () => {
+        AboutUrl("https://foodispower.org/veganism/");
+      },
+
       subheading:
         "F.E.P. works to promote ethical\nveganism through education,\nthrough outreach, and also by\nproviding tools to help people go\nvegan  ",
     },
@@ -113,6 +120,10 @@ const AboutUs = ({ navigation }) => {
       key: 3,
       img: require("../../assets/farm.png"),
       heading: "farm workers",
+      onPressFun: () => {
+        AboutUrl("https://foodispower.org/farm-workers");
+      },
+
       subheading:
         "F.E.P. works to advance the rights\nof farm workers by supporting\ncorporate, legislative, and\nregulatory changes. ",
     },
@@ -120,6 +131,10 @@ const AboutUs = ({ navigation }) => {
       key: 4,
       img: require("../../assets/child.png"),
       heading: "Chocolate TRANSPARENCY",
+      onPressFun: () => {
+        AboutUrl("https://foodispower.org/chocolate/");
+      },
+
       subheading:
         "F.E.P. is working to inform\nconsumers around the globe about\nthe worst forms of child labor,\nincluding slavery, that take place for\nchocolate.",
     },
@@ -127,6 +142,10 @@ const AboutUs = ({ navigation }) => {
       key: 5,
       img: require("../../assets/pple.png"),
       heading: "ACCESS TO HEALTHY FOOD",
+      onPressFun: () => {
+        AboutUrl("https://foodispower.org/access/");
+      },
+
       subheading:
         "When asked, F.E.P. works with\ncommunity members to survey the\naccess to healthy foods...",
     },
@@ -178,7 +197,7 @@ const AboutUs = ({ navigation }) => {
                   <CustomButton
                     title={item.key === 6 ? "Donate" : "Learn More"}
                     onClick={() => {
-                      item.key === 6 ? donateUrl() : AboutUrl();
+                      item.key === 6 ? donateUrl() : item.onPressFun();
                     }}
                   />
                 </View>

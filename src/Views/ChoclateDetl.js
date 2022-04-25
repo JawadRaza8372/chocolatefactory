@@ -17,12 +17,14 @@ import ScreenHeader from "../Components/ScreenHeader";
 import FbShareComp from "../Components/FbShareComp";
 import TweetSharComp from "../Components/TweetSharComp";
 import SetAsFvrt from "../Components/SetAsFvrt";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AntDesign } from "@expo/vector-icons";
+import { setFeatures } from "../store/projectSlice";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const ChoclateDetl = ({ route, navigation }) => {
   const { data } = route.params;
   const { name, status, logo_url } = data;
-
+  const dispatch = useDispatch();
   // CANNOT_RECOMMEND;
   // RECOMMENDED;
   // MIXED;
@@ -73,7 +75,26 @@ const ChoclateDetl = ({ route, navigation }) => {
 
   const { features } = useSelector((state) => state.project);
   const check = features && features?.filter((dat) => dat.name === name);
-  console.log("checking", features, typeof features, check.length);
+  const removedata = async () => {
+    const filterdDat = features.filter((dat) => dat.name !== name);
+    try {
+      const jsonValue = JSON.stringify(filterdDat);
+      await AsyncStorage.setItem("chocFavrt", jsonValue);
+    } catch (e) {
+      // saving error
+    }
+    const jsonValue1 = await AsyncStorage.getItem("chocFavrt");
+    if (
+      jsonValue1 !== null &&
+      jsonValue1 !== "" &&
+      jsonValue1 !== {} &&
+      jsonValue1 !== undefined &&
+      jsonValue1 !== "underfined"
+    ) {
+      dispatch(setFeatures({ features: JSON.parse(jsonValue1) }));
+    }
+    alert("Removed from favrote");
+  };
   return (
     <SafeAreaView style={styles.safediv}>
       <ScreenHeader
@@ -100,7 +121,9 @@ const ChoclateDetl = ({ route, navigation }) => {
             <Text style={styles.statusTxt}>{status ? status : "Unkonwn"}</Text>
           </View>
           {check.length > 0 && (
-            <AntDesign name="heart" size={h("4%")} color="red" />
+            <TouchableOpacity onPress={removedata}>
+              <AntDesign name="heart" size={h("4%")} color="red" />
+            </TouchableOpacity>
           )}
         </View>
         <View style={styles.scanCom}>

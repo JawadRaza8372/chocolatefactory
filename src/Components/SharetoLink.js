@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { w, h } from "react-native-responsiveness";
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { screenbg } from "../AppColors";
 
 const SharetoLink = ({ content }) => {
@@ -17,7 +17,7 @@ const SharetoLink = ({ content }) => {
               ? "#00acee"
               : content === "3"
               ? "#4267B2"
-              : "transparent",
+              : "lightgrey",
         }}
       >
         {content === "1" ? (
@@ -26,7 +26,9 @@ const SharetoLink = ({ content }) => {
           <FontAwesome name="twitter" size={h("4.3%")} color={screenbg} />
         ) : content === "3" ? (
           <FontAwesome name="facebook" size={h("4.3%")} color={screenbg} />
-        ) : null}
+        ) : (
+          <Ionicons name="heart-dislike" size={h("4.3%")} color={screenbg} />
+        )}
       </View>
       <View style={styles.txtCont}>
         <Text style={styles.titletxt}>
@@ -36,7 +38,7 @@ const SharetoLink = ({ content }) => {
             ? "Share on twitter"
             : content === "3"
             ? "share on facebook"
-            : ""}
+            : "Remove from favrote"}
         </Text>
       </View>
     </View>

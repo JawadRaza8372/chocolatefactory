@@ -15,7 +15,9 @@ import { mainColor, screenbg } from "../AppColors";
 import AboutUs from "../Views/AboutUs";
 import ContactUs from "../Views/ContactUs";
 import Donate from "../Views/Donate";
+import NewsDetail from "../Views/NewsDetail";
 const icons = [
+  { title: "Home" },
   { title: "Understanding the list" },
   { title: "About Us" },
   { title: "Contact F.E.P" },
@@ -110,6 +112,16 @@ function DrawerNavig() {
           drawerInactiveTintColor: "black",
         }}
         component={HomeScreen}
+      />
+      <Drawer.Screen
+        name="Understand"
+        options={{
+          headerShown: false,
+          drawerActiveTintColor: "black",
+          drawerActiveBackgroundColor: screenbg,
+          drawerInactiveTintColor: "black",
+        }}
+        component={NewsDetail}
       />
       <Drawer.Screen
         name="AboutUs"

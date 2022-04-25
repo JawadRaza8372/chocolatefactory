@@ -78,8 +78,8 @@ const AddProduct = (data) => {
 const donateUrl = async () => {
   await Linking.openURL("https://foodispower.org/donate/");
 };
-const AboutUrl = async () => {
-  await Linking.openURL("https://foodispower.org/mission-and-values/");
+const AboutUrl = async (url) => {
+  await Linking.openURL(url);
 };
 export { sendclick, donateUrl, AboutUrl, contactUs, AddProduct };
 //     [8:55 am, 06/04/2022] Umer Aftab 2 Uol: 1. We can have this info go to info@foodispower.org

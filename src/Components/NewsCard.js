@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     color: screenbg,
   },
   desc: {
-    fontSize: h("2%"),
+    fontSize: h("1.7%"),
     color: screenbg,
   },
 });

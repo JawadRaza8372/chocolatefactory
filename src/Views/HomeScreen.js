@@ -20,21 +20,41 @@ import ItemCard from "../Components/ItemCard";
 import { AntDesign } from "@expo/vector-icons";
 import CustomModel from "../Components/CustomModel";
 import { useSelector } from "react-redux";
+import AlphabetList from "react-native-flatlist-alphabet";
+
 const HomeScreen = ({ navigation }) => {
   const [selected, setselected] = useState("All");
   const [showModal, setshowModal] = useState(false);
   const [chocoItems, setchocoItems] = useState([]);
   const [isLoading, setisLoading] = useState(false);
+  const [selectedReason, setselectedReason] = useState("");
   const [searchtxt, setsearchtxt] = useState("");
   const { choclateList, lastupdate } = useSelector((state) => state.project);
   const myfilteredlist = () => {
     // const statusBg =
-
     if (selected !== "All") {
-      const filtered =
-        choclateList &&
-        choclateList?.filter((data) => selected === data?.status);
-      setchocoItems(filtered);
+      if (selected === "CANNOT_RECOMMEND") {
+        if (selectedReason !== "") {
+          const filtered =
+            choclateList &&
+            choclateList?.filter(
+              (data) =>
+                selected === data?.status &&
+                selectedReason === data?.status_reason
+            );
+          setchocoItems(filtered);
+        } else {
+          const filtered =
+            choclateList &&
+            choclateList?.filter((data) => selected === data?.status);
+          setchocoItems(filtered);
+        }
+      } else {
+        const filtered =
+          choclateList &&
+          choclateList?.filter((data) => selected === data?.status);
+        setchocoItems(filtered);
+      }
     } else {
       setchocoItems(choclateList);
     }
@@ -54,9 +74,81 @@ const HomeScreen = ({ navigation }) => {
   };
   useEffect(() => {
     myfilteredlist();
-  }, [selected]);
+    console.log("run");
+  }, [selected, selectedReason]);
 
-  const data = [
+  const dataforMenu = [
+    {
+      title: "All",
+      onpressfun: () => {
+        setselected("All");
+        setshowModal(false);
+      },
+    },
+    {
+      title: "RECOMMENDED",
+      onpressfun: () => {
+        setselected("RECOMMENDED");
+        setshowModal(false);
+      },
+    },
+    {
+      title: "CANNOT RECOMMEND",
+      onpressfun: () => {
+        setselected("CANNOT_RECOMMEND");
+        setselectedReason("");
+        setshowModal(false);
+      },
+    },
+    {
+      title: "NR - Other issues",
+      onpressfun: () => {
+        setselected("CANNOT_RECOMMEND");
+        setselectedReason("CANNOT_RECOMMEND_OTHER_ISSUES");
+        setshowModal(false);
+      },
+    },
+    {
+      title: "NR - Did not disclose",
+      onpressfun: () => {
+        setselected("CANNOT_RECOMMEND");
+        setselectedReason("CANNOT_RECOMMEND_DID_NOT_DISCLOSE");
+        setshowModal(false);
+      },
+    },
+    {
+      title: "NR - Did not respond",
+      onpressfun: () => {
+        setselected("CANNOT_RECOMMEND");
+        setselectedReason("CANNOT_RECOMMEND_DID_NOT_RESPOND");
+        setshowModal(false);
+      },
+    },
+    {
+      title: "NR - Working on issues",
+      onpressfun: () => {
+        setselected("CANNOT_RECOMMEND");
+        setselectedReason("CANNOT_RECOMMEND_WORKING_ON_ISSUES");
+        setshowModal(false);
+      },
+    },
+    {
+      title: "NR - Responded",
+      onpressfun: () => {
+        setselected("CANNOT_RECOMMEND");
+        setselectedReason("CANNOT_RECOMMEND_RESPONDED");
+        setshowModal(false);
+      },
+    },
+    {
+      title: "MIXED",
+      onpressfun: () => {
+        setselected("MIXED");
+        setshowModal(false);
+      },
+    },
+  ];
+  const dataNew = [
     {
       title: "All",
       onpressfun: () => {
@@ -75,9 +167,11 @@ const HomeScreen = ({ navigation }) => {
       title: "NR",
       onpressfun: () => {
         setselected("CANNOT_RECOMMEND");
+        setselectedReason("");
         setshowModal(false);
       },
     },
+
     {
       title: "M",
       onpressfun: () => {
@@ -86,6 +180,7 @@ const HomeScreen = ({ navigation }) => {
       },
     },
   ];
+
   const itemonPress = (data) => {
     navigation.navigate("chocoItemDesc", { data: data });
   };
@@ -104,7 +199,11 @@ const HomeScreen = ({ navigation }) => {
   useEffect(() => {
     searchfun();
   }, [searchtxt]);
-
+  const getItemLayout = (data, index) => ({
+    length: ROW_HEIGHT + 20,
+    offset: (ROW_HEIGHT + 20) * index + HEADER_HEIGHT,
+    index,
+  });
   return (
     <>
       <SafeAreaView style={styles.bgdiv}>
@@ -179,10 +278,35 @@ const HomeScreen = ({ navigation }) => {
                 <ActivityIndicator size="large" color={mainColor} />
               </View>
             )}
+            {/* <FlatList
+                data={chocoItems}
+                keyExtractor={(item) => item.name}
+                renderItem={({ item }) => (
+                  <ItemCard data={item} onClickF={itemonPress} />
+                )}
+              /> */}
+            {/* <AlphabetList
+                data={chocoItems}
+                renderItem={(item) => (
+                  <ItemCard data={item} onClickF={itemonPress} />
+                )}
+                // renderSectionHeader={this.renderSectionHeader}
+                // getItemHeight={() => sizes.itemHeight}
+                // sectionHeaderHeight={sizes.headerHeight}
+                indexLetterSize={15}
+                letterIndexWidth={40}
+                containerStyle={{ marginRight: 10 }}
+                alphabetContainer={{
+                  alignSelf: "flex-start",
+                  justifyContent: "flex-start",
+                }}
+                indexLetterColor="#ff6100"
+                letterItemStyle={{ height: 25 }}
+              /> */}
           </ScrollView>
         </View>
         <CustomNavBtn
-          data={data}
+          data={dataNew}
           activeVal={
             selected === "All"
               ? "All"
@@ -202,25 +326,21 @@ const HomeScreen = ({ navigation }) => {
             <View style={styles.hedtxt}>
               <Text style={styles.headtxt}>Filter</Text>
             </View>
-            {data.map((dat, index) => (
-              <TouchableOpacity
-                onPress={dat.onpressfun}
-                style={styles.opttxt}
-                key={index}
-              >
-                <Text style={styles.desctext}>
-                  {dat.title === "All"
-                    ? "All"
-                    : dat.title === "R"
-                    ? "Recomanded"
-                    : dat.title === "NR"
-                    ? "Not Recomanded"
-                    : dat.title === "M"
-                    ? "Mixed"
-                    : ""}
-                </Text>
-              </TouchableOpacity>
-            ))}
+            <ScrollView contentContainerStyle={{ width: w("85%") }}>
+              {dataforMenu.map((dat, index) => {
+                return (
+                  <>
+                    <TouchableOpacity
+                      onPress={dat.onpressfun}
+                      style={styles.opttxt}
+                      key={index}
+                    >
+                      <Text style={styles.desctext}>{dat.title}</Text>
+                    </TouchableOpacity>
+                  </>
+                );
+              })}
+            </ScrollView>
           </View>
         </View>
       </CustomModel>
@@ -298,21 +418,26 @@ const styles = StyleSheet.create({
   },
   menu: {
     width: "90%",
-    height: "40%",
+    height: h("60%"),
     backgroundColor: screenbg,
     borderRadius: h("2%"),
     overflow: "hidden",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "column",
   },
   hedtxt: {
     width: "100%",
-    height: "20%",
+    height: h("6%"),
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
   },
   opttxt: {
     width: "100%",
-    height: "20%",
+    height: h("5%"),
+    marginBottom: 5,
     display: "flex",
     alignItems: "center",
     justifyContent: "flex-start",

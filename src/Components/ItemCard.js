@@ -2,19 +2,14 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import { w, h } from "react-native-responsiveness";
 import { screenbg } from "../AppColors";
+import { AntDesign } from "@expo/vector-icons";
+import { useSelector } from "react-redux";
 const ItemCard = ({ data, onClickF }) => {
-  // CANNOT_RECOMMEND;
-  // RECOMMENDED;
-  // MIXED;
-  // "name": "10 degrees chocolate",
-  //     "notes": null,
-  //     "status": "CANNOT_RECOMMEND",
-  //     "status_reason": "CANNOT_RECOMMEND_DID_NOT_RESPOND",
-  //     "status_url": null,
-  //     "description": null,
-  //     "logo_url": "https://media.graphcms.com/rU4nCRuQbyXAYQoMqo07",
-  //     "logo_url_retina": "https://media.graphcms.com/rU4nCRuQbyXAYQoMqo07"
-  const { name, status, logo_url } = data;
+  const { features } = useSelector((state) => state.project);
+  const { name, status, logo_url, status_reason } = data;
+  const linethrough =
+    status_reason === "CANNOT_RECOMMEND_OTHER_ISSUES" ? true : false;
+  const check = features && features?.filter((dat) => dat.name === name);
   const statusBg =
     status === "RECOMMENDED"
       ? "green"
@@ -38,10 +33,25 @@ const ItemCard = ({ data, onClickF }) => {
           />
         </View>
         <View style={styles.txtCont}>
-          <Text>{name}</Text>
+          <Text style={linethrough ? styles.strikethrough : { color: "black" }}>
+            {name}
+          </Text>
 
-          <View style={{ ...styles.status, backgroundColor: statusBg }}>
-            <Text style={styles.statusTxt}>{status}</Text>
+          <View
+            style={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-start",
+              flexDirection: "row",
+            }}
+          >
+            <View style={{ ...styles.status, backgroundColor: statusBg }}>
+              <Text style={styles.statusTxt}>{status}</Text>
+            </View>
+            {check.length > 0 && (
+              <AntDesign name="heart" size={h("3%")} color="red" />
+            )}
           </View>
         </View>
       </TouchableOpacity>
@@ -98,6 +108,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 10,
+    marginRight: h("1%"),
   },
   statusTxt: {
     fontSize: h("1.8%"),
@@ -109,5 +120,9 @@ const styles = StyleSheet.create({
     height: "85%",
     resizeMode: "contain",
     borderRadius: h("1%"),
+  },
+  strikethrough: {
+    textDecorationLine: "line-through",
+    textDecorationStyle: "solid",
   },
 });

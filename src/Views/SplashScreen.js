@@ -13,10 +13,35 @@ const SplashScreen = ({ navigation }) => {
     const checkinggs = await axios.get(
       "https://api-chocolate-list.herokuapp.com/chocolatelist/AppData.json"
     );
+
     const mydata = checkinggs.data;
     if (mydata) {
-      dispatch(setChocoList({ choclateList: mydata.companies }));
+      console.log(mydata[0]);
+      // dispatch(
+      //   setChocoList({
+      //     choclateList: mydata.companies.map((dat) => ({
+      //       ...dat,
+      //       value: dat.name,
+      //       key: dat.name,
+      //     })),
+      //   })
+      // );
+      dispatch(
+        setChocoList({
+          choclateList: mydata.companies,
+        })
+      );
       dispatch(setUpdate({ lastupdate: mydata.last_updated }));
+      const jsonValue1 = await AsyncStorage.getItem("chocFavrt");
+      if (
+        jsonValue1 !== null &&
+        jsonValue1 !== "" &&
+        jsonValue1 !== {} &&
+        jsonValue1 !== undefined &&
+        jsonValue1 !== "underfined"
+      ) {
+        dispatch(setFeatures({ features: JSON.parse(jsonValue1) }));
+      }
     }
   };
   const fetchingAsyncData = async () => {

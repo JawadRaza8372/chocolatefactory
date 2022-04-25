@@ -52,7 +52,7 @@ const ScanComp = () => {
     });
     if (itemDet3.data.status === "not found" || !itemDet3.data.company) {
       const itemDet2 = await axios.get(
-        `https://world.openfoodfacts.org/api/v0/product/${codeRes}.json`,
+        `https://world.openfoodfacts.org/api/v0/product/${code}.json`,
         { headers: { "User-Agent": "Chocolate List App", Version: "1.0" } }
       );
       if (itemDet2.data.status === 0) {
@@ -69,7 +69,6 @@ const ScanComp = () => {
       fetchItemDetail();
     }
   }, [codeRes]);
-  console.log("checking", codeRes);
   if (hasPermission === null) {
     return <Text>Requesting for camera permission</Text>;
   }
@@ -79,11 +78,19 @@ const ScanComp = () => {
   const checkingrenders = () => {
     if (codeRes) {
       // name, status, logo_url
-      const product = choclateList.filter((dat) => {
-        const newtitle = dat.name.toUpperCase();
-        const serchtext = codeRes.toUpperCase();
-        return newtitle === serchtext || newtitle.includes(serchtext);
-      });
+      const check =
+        choclateList &&
+        choclateList?.find((dat) => `${dat.name}` === "Hershey's");
+      const product =
+        choclateList && choclateList?.filter((dat) => dat.name === codeRes);
+      const nproduct =
+        choclateList &&
+        choclateList?.filter((dat) => dat.name.includes(codeRes));
+      console.log("1===>", product, codeRes);
+      console.log("2===>", nproduct, codeRes);
+      console.log("3===>", codeRes, check, codeRes.length);
+      console.log("=======End=====");
+
       if (product.length > 0) {
         const statusBg =
           product[0].status === "RECOMMENDED"
