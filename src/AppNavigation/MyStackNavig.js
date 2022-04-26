@@ -1,6 +1,5 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
-import HomeScreen from "../Views/HomeScreen";
 import SplashScreen from "../Views/SplashScreen";
 import SrchScnScreen from "../Views/SrchScnScreen";
 import DrawerNavig from "./DrawerNavig";

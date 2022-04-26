@@ -7,6 +7,7 @@ export default function App() {
     "SerializableStateInvariantMiddleware",
     "ImmutableStateInvariantMiddleware",
     "VirtualizedLists should never be nested inside plain",
+    "Each child in a list should",
   ]);
 
   return (

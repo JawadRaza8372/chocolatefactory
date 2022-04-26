@@ -20,7 +20,6 @@ import ItemCard from "../Components/ItemCard";
 import { AntDesign } from "@expo/vector-icons";
 import CustomModel from "../Components/CustomModel";
 import { useSelector } from "react-redux";
-import AlphabetList from "react-native-flatlist-alphabet";
 
 const HomeScreen = ({ navigation }) => {
   const [selected, setselected] = useState("All");
@@ -238,47 +237,46 @@ const HomeScreen = ({ navigation }) => {
             onChangeText={(text) => setsearchtxt(text)}
           />
 
-          {/* <ScrollView> */}
-          <NewsCard onClickf={() => navigation.navigate("newsDesc")} />
-          <HeaderInfo
-            title="CHOCOLATE LIST"
-            subtitle={"Last Updated:" + `${lastupdate}`}
-          >
-            <TouchableOpacity onPress={toggleModal} style={styles.flters}>
-              <View style={styles.minibtn}>
-                <Text>Filters</Text>
-                <AntDesign name="right" size={24} color="black" />
+          <ScrollView>
+            <NewsCard onClickf={() => navigation.navigate("newsDesc")} />
+            <HeaderInfo
+              title="CHOCOLATE LIST"
+              subtitle={"Last Updated:" + `${lastupdate}`}
+            >
+              <TouchableOpacity onPress={toggleModal} style={styles.flters}>
+                <View style={styles.minibtn}>
+                  <Text>Filters</Text>
+                  <AntDesign name="right" size={24} color="black" />
+                </View>
+                <View style={styles.selecteddiv}>
+                  <Text style={styles.statsTxt}>
+                    {selected === "All"
+                      ? "All"
+                      : selected === "RECOMMENDED"
+                      ? "Recomanded"
+                      : selected === "CANNOT_RECOMMEND"
+                      ? "Not Recomanded"
+                      : selected === "MIXED"
+                      ? "Mixed"
+                      : ""}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </HeaderInfo>
+            {choclateList && chocoItems && !isLoading ? (
+              <FlatList
+                data={chocoItems}
+                keyExtractor={(item, index) => index}
+                renderItem={({ item, index }) => (
+                  <ItemCard data={item} key={index} onClickF={itemonPress} />
+                )}
+              />
+            ) : (
+              <View style={styles.isLoading}>
+                <ActivityIndicator size="large" color={mainColor} />
               </View>
-              <View style={styles.selecteddiv}>
-                <Text style={styles.statsTxt}>
-                  {selected === "All"
-                    ? "All"
-                    : selected === "RECOMMENDED"
-                    ? "Recomanded"
-                    : selected === "CANNOT_RECOMMEND"
-                    ? "Not Recomanded"
-                    : selected === "MIXED"
-                    ? "Mixed"
-                    : ""}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </HeaderInfo>
-          {choclateList && chocoItems && !isLoading ? (
-            <FlatList
-              data={chocoItems}
-              keyExtractor={(item) => item.name}
-              renderItem={({ item }) => (
-                <ItemCard data={item} onClickF={itemonPress} />
-              )}
-            />
-          ) : (
-            <View style={styles.isLoading}>
-              <ActivityIndicator size="large" color={mainColor} />
-            </View>
-          )}
-
-          {/* </ScrollView> */}
+            )}
+          </ScrollView>
         </View>
         <CustomNavBtn
           data={dataNew}

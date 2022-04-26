@@ -38,6 +38,7 @@ const ScanComp = () => {
   const clearfunc = () => {
     setScanned(false);
     setcodeRes("");
+    setproductNotFound(false);
   };
   const handleBarCodeScanned = async ({ type, data }) => {
     // if (type === "512" || type === 512) {
