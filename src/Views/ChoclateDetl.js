@@ -23,7 +23,7 @@ import { setFeatures } from "../store/projectSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 const ChoclateDetl = ({ route, navigation }) => {
   const { data } = route.params;
-  const { name, status, logo_url } = data;
+  const { name, status, logo_url, status_reason } = data;
   const dispatch = useDispatch();
   // CANNOT_RECOMMEND;
   // RECOMMENDED;
@@ -95,10 +95,14 @@ const ChoclateDetl = ({ route, navigation }) => {
     }
     alert("Removed from favrote");
   };
+  const linethrough =
+    status_reason === "CANNOT_RECOMMEND_OTHER_ISSUES" ? true : false;
+
   return (
     <SafeAreaView style={styles.safediv}>
       <ScreenHeader
         title={name ? name : "Company Name"}
+        linethrough={linethrough}
         onPressFun={() => navigation.goBack()}
       />
       <ScrollView contentContainerStyle={styles.scrolldiv}>
@@ -207,6 +211,10 @@ const styles = StyleSheet.create({
     width: w("50%"),
     height: w("50%"),
     resizeMode: "contain",
+  },
+  strikethrough: {
+    textDecorationLine: "line-through",
+    textDecorationStyle: "solid",
   },
   safediv: { width: "100%", height: "100%", backgroundColor: screenbg },
   scrolldiv: { width: "100%", paddingBottom: h("2.5%") },

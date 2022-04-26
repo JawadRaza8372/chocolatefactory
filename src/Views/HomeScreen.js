@@ -74,7 +74,6 @@ const HomeScreen = ({ navigation }) => {
   };
   useEffect(() => {
     myfilteredlist();
-    console.log("run");
   }, [selected, selectedReason]);
 
   const dataforMenu = [
@@ -239,71 +238,47 @@ const HomeScreen = ({ navigation }) => {
             onChangeText={(text) => setsearchtxt(text)}
           />
 
-          <ScrollView>
-            <NewsCard onClickf={() => navigation.navigate("newsDesc")} />
-            <HeaderInfo
-              title="CHOCOLATE LIST"
-              subtitle={"Last Updated:" + `${lastupdate}`}
-            >
-              <TouchableOpacity onPress={toggleModal} style={styles.flters}>
-                <View style={styles.minibtn}>
-                  <Text>Filters</Text>
-                  <AntDesign name="right" size={24} color="black" />
-                </View>
-                <View style={styles.selecteddiv}>
-                  <Text style={styles.statsTxt}>
-                    {selected === "All"
-                      ? "All"
-                      : selected === "RECOMMENDED"
-                      ? "Recomanded"
-                      : selected === "CANNOT_RECOMMEND"
-                      ? "Not Recomanded"
-                      : selected === "MIXED"
-                      ? "Mixed"
-                      : ""}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            </HeaderInfo>
-            {choclateList && chocoItems && !isLoading ? (
-              <FlatList
-                data={chocoItems}
-                keyExtractor={(item) => item.name}
-                renderItem={({ item }) => (
-                  <ItemCard data={item} onClickF={itemonPress} />
-                )}
-              />
-            ) : (
-              <View style={styles.isLoading}>
-                <ActivityIndicator size="large" color={mainColor} />
+          {/* <ScrollView> */}
+          <NewsCard onClickf={() => navigation.navigate("newsDesc")} />
+          <HeaderInfo
+            title="CHOCOLATE LIST"
+            subtitle={"Last Updated:" + `${lastupdate}`}
+          >
+            <TouchableOpacity onPress={toggleModal} style={styles.flters}>
+              <View style={styles.minibtn}>
+                <Text>Filters</Text>
+                <AntDesign name="right" size={24} color="black" />
               </View>
-            )}
-            {/* <FlatList
-                data={chocoItems}
-                keyExtractor={(item) => item.name}
-                renderItem={({ item }) => (
-                  <ItemCard data={item} onClickF={itemonPress} />
-                )}
-              /> */}
-            {/* <AlphabetList
-                data={chocoItems}
-                renderItem={(item) => (
-                  <ItemCard data={item} onClickF={itemonPress} />
-                )}
-                // renderSectionHeader={this.renderSectionHeader}
-                // getItemHeight={() => sizes.itemHeight}
-                // sectionHeaderHeight={sizes.headerHeight}
-                indexLetterSize={15}
-                letterIndexWidth={40}
-                containerStyle={{ marginRight: 10 }}
-                alphabetContainer={{
-                  alignSelf: "flex-start",
-                  justifyContent: "flex-start",
-                }}
-                indexLetterColor="#ff6100"
-                letterItemStyle={{ height: 25 }}
-              /> */}
-          </ScrollView>
+              <View style={styles.selecteddiv}>
+                <Text style={styles.statsTxt}>
+                  {selected === "All"
+                    ? "All"
+                    : selected === "RECOMMENDED"
+                    ? "Recomanded"
+                    : selected === "CANNOT_RECOMMEND"
+                    ? "Not Recomanded"
+                    : selected === "MIXED"
+                    ? "Mixed"
+                    : ""}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </HeaderInfo>
+          {choclateList && chocoItems && !isLoading ? (
+            <FlatList
+              data={chocoItems}
+              keyExtractor={(item) => item.name}
+              renderItem={({ item }) => (
+                <ItemCard data={item} onClickF={itemonPress} />
+              )}
+            />
+          ) : (
+            <View style={styles.isLoading}>
+              <ActivityIndicator size="large" color={mainColor} />
+            </View>
+          )}
+
+          {/* </ScrollView> */}
         </View>
         <CustomNavBtn
           data={dataNew}

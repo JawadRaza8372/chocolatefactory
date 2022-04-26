@@ -7,6 +7,8 @@ import { screenbg, mainColor } from "../AppColors";
 const ScreenHeader = ({
   isMenuButton,
   title,
+  linethrough,
+
   onPressFun,
   scanbtn,
   onPressFunScan,
@@ -36,7 +38,17 @@ const ScreenHeader = ({
         )}
       </View>
       <View style={styles.screenHeadCont}>
-        {title && <Text style={styles.screenTitle}>{title}</Text>}
+        {title && (
+          <Text
+            style={
+              linethrough
+                ? { ...styles.screenTitle, ...styles.strikethrough }
+                : styles.screenTitle
+            }
+          >
+            {title}
+          </Text>
+        )}
         {children && children}
       </View>
       <View style={styles.avatrCont}>
@@ -122,5 +134,10 @@ const styles = StyleSheet.create({
     fontSize: h("2.2%"),
     fontWeight: "900",
     color: screenbg,
+  },
+  strikethrough: {
+    textDecorationLine: "line-through",
+    textDecorationStyle: "solid",
+    textDecorationColor: "white",
   },
 });

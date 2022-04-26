@@ -13,18 +13,22 @@ import { w, h } from "react-native-responsiveness";
 import { screenbg } from "../AppColors";
 import SharetoLink from "./SharetoLink";
 import CustomButton from "./CustomButton";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import TweetSharComp from "./TweetSharComp";
 import FbShareComp from "./FbShareComp";
 import NotFoundComp from "./NotFoundComp";
+import { setFeatures } from "../store/projectSlice";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const ScanComp = () => {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [productNotFound, setproductNotFound] = useState(false);
   const [codeRes, setcodeRes] = useState("");
+  const [product, setproduct] = useState([]);
   const { choclateList, lastupdate } = useSelector((state) => state.project);
-
+  const { features } = useSelector((state) => state.project);
+  const dispatch = useDispatch();
   useEffect(() => {
     (async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
@@ -39,36 +43,37 @@ const ScanComp = () => {
     // if (type === "512" || type === 512) {
     setScanned(true);
     // setcodeRes(data);
-    await fetchItemDetail(data);
+    const itemDet3 = await axios.get(`https://barcode.monster/api/${data}`, {
+      headers: { "User-Agent": "Chocolate List App", Version: "1.0" },
+    });
+    const itemDet2 = await axios.get(
+      `https://world.openfoodfacts.org/api/v0/product/${data}.json`,
+      { headers: { "User-Agent": "Chocolate List App", Version: "1.0" } }
+    );
+    if (itemDet3.data.status === "not found" && itemDet2.data.status === 0) {
+      setproductNotFound(true);
+    } else {
+      let name = itemDet3.data.company
+        ? itemDet3.data.company
+        : itemDet2.data.product_name;
+      setcodeRes(name);
+      // const newname = name.substring(0, 5);
+      let newproduct =
+        choclateList &&
+        choclateList?.filter(
+          (dat) =>
+            dat.name.replace("'", " ").replace("’", " ") ===
+            name.replace("'", " ").replace("’", " ")
+        );
+      setproduct(newproduct);
+    }
     // } else {
     //   alert("not supported this format");
     //   setScanned(true);
     // }
   };
   // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
-  const fetchItemDetail = async (code) => {
-    const itemDet3 = await axios.get(`https://barcode.monster/api/${code}`, {
-      headers: { "User-Agent": "Chocolate List App", Version: "1.0" },
-    });
-    if (itemDet3.data.status === "not found" || !itemDet3.data.company) {
-      const itemDet2 = await axios.get(
-        `https://world.openfoodfacts.org/api/v0/product/${code}.json`,
-        { headers: { "User-Agent": "Chocolate List App", Version: "1.0" } }
-      );
-      if (itemDet2.data.status === 0) {
-        setproductNotFound(true);
-      } else {
-        setcodeRes(itemDet2.data.product_name);
-      }
-    } else {
-      setcodeRes(itemDet3.data.company);
-    }
-  };
-  useEffect(() => {
-    if (codeRes) {
-      fetchItemDetail();
-    }
-  }, [codeRes]);
+
   if (hasPermission === null) {
     return <Text>Requesting for camera permission</Text>;
   }
@@ -78,18 +83,6 @@ const ScanComp = () => {
   const checkingrenders = () => {
     if (codeRes) {
       // name, status, logo_url
-      const check =
-        choclateList &&
-        choclateList?.find((dat) => `${dat.name}` === "Hershey's");
-      const product =
-        choclateList && choclateList?.filter((dat) => dat.name === codeRes);
-      const nproduct =
-        choclateList &&
-        choclateList?.filter((dat) => dat.name.includes(codeRes));
-      console.log("1===>", product, codeRes);
-      console.log("2===>", nproduct, codeRes);
-      console.log("3===>", codeRes, check, codeRes.length);
-      console.log("=======End=====");
 
       if (product.length > 0) {
         const statusBg =
@@ -100,6 +93,30 @@ const ScanComp = () => {
             : product[0].status === "MIXED"
             ? "gold"
             : "black";
+
+        const removedata = async () => {
+          const filterdDat = features.filter(
+            (dat) => dat.name !== product[0].name
+          );
+          try {
+            const jsonValue = JSON.stringify(filterdDat);
+            await AsyncStorage.setItem("chocFavrt", jsonValue);
+          } catch (e) {
+            // saving error
+          }
+          const jsonValue1 = await AsyncStorage.getItem("chocFavrt");
+          if (
+            jsonValue1 !== null &&
+            jsonValue1 !== "" &&
+            jsonValue1 !== {} &&
+            jsonValue1 !== undefined &&
+            jsonValue1 !== "underfined"
+          ) {
+            dispatch(setFeatures({ features: JSON.parse(jsonValue1) }));
+          }
+          alert("Removed from favrote");
+        };
+
         const recomandtxt = ` Thank ${product[0].name} for not using Chocolate\nfrom some of the worse areas with Child Slavery.`;
         const recomandMsg = `I am very Thank to  ${product[0].name}  for not using Chocolate\nfrom some of the worse areas with Child Slavery.`;
         const notRecomadMsg = `I am here to inform  ${product[0].name}  that i won’t be buy from\nthem until they agree to not using\nChocolate from some of the worst ares with Child Slavery.`;
@@ -107,6 +124,12 @@ const ScanComp = () => {
         const notRecomadtext = `Inform ${product[0].name} that you won’t be buying from\nthem until they agree to not using\nChocolate from some of the worst ares with Child Slavery.`;
         const mixedtxt = `Inform ${product[0].name} that you won’t be buying from\nthem until they agree to not using\nChocolate from some of the worst ares with Child Slavery.`;
         const mynotesrecom = `Company Responded & Veriﬁed Chocolate\nis not sourced from some of the worse areas\nwith Child Slavery`;
+        const common = `Cannot recommend because company\n${
+          product[0].status === "MIXED" ? "still " : ""
+        }sources ${
+          product[0].status === "MIXED" ? "some of it's " : ""
+        } cocao from some of the \nworst areas of Child Slavery`;
+
         let textdec =
           product[0].status === "RECOMMENDED"
             ? recomandtxt
@@ -123,13 +146,70 @@ const ScanComp = () => {
             : product[0].status === "MIXED"
             ? notRecomadMsg
             : "";
-
+        const linethrough =
+          product[0].status_reason === "CANNOT_RECOMMEND_OTHER_ISSUES"
+            ? true
+            : false;
+        const check =
+          features && features?.filter((dat) => dat.name === product[0].name);
         return (
           <>
-            <Text style={styles.compName}>{product[0].name}</Text>
-            <View style={{ ...styles.status, backgroundColor: statusBg }}>
-              <Text style={styles.statusTxt}>{product[0].status}</Text>
+            <Text
+              style={
+                linethrough
+                  ? { ...styles.compName, ...styles.strikethrough }
+                  : styles.compName
+              }
+            >
+              {product[0].name}
+            </Text>
+            <View
+              style={{
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-evenly",
+                flexDirection: "row",
+                alignSelf: "center",
+              }}
+            >
+              <View
+                style={{
+                  ...styles.status,
+                  backgroundColor: statusBg ? statusBg : "black",
+                }}
+              >
+                <Text style={styles.statusTxt}>
+                  {product[0].status ? product[0].status : "Unkonwn"}
+                </Text>
+              </View>
+              {check.length > 0 && (
+                <TouchableOpacity onPress={removedata}>
+                  <AntDesign name="heart" size={h("4%")} color="red" />
+                </TouchableOpacity>
+              )}
             </View>
+            {/* <View style={{ ...styles.status, backgroundColor: statusBg }}>
+              <Text style={styles.statusTxt}>{product[0].status}</Text>
+            </View> */}
+            <View style={styles.scanCompimg}>
+              <Image
+                source={{
+                  uri: product[0].logo_url,
+                }}
+                style={styles.imgshow}
+              />
+            </View>
+            <Text style={styles.descttit}>Company Note</Text>
+            <Text style={styles.desc}>
+              {product[0].status === "RECOMMENDED" && mynotesrecom}
+              {(product[0].status === "CANNOT_RECOMMEND" ||
+                product[0].status === "MIXED") &&
+                common}
+            </Text>
+
+            <Text style={styles.descttit}>Take Actions</Text>
+
             <Text style={styles.desc}>{textdec}</Text>
             {product[0].status === "RECOMMENDED" && (
               <SetAsfvrt name={product[0].name} />
@@ -196,7 +276,7 @@ const styles = StyleSheet.create({
   },
   status: {
     height: h("4%"),
-    width: "50%",
+    width: "60%",
     backgroundColor: "brown",
     borderRadius: h("1%"),
     display: "flex",
@@ -217,9 +297,34 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginBottom: h("3%"),
   },
+  descttit: {
+    fontSize: h("2.5%"),
+    width: "90%",
+    alignSelf: "center",
+    marginBottom: h("3%"),
+  },
   compName: {
     fontSize: h("2.3%"),
     textAlign: "center",
     fontWeight: "bold",
+  },
+  scanCompimg: {
+    width: w("35%"),
+    height: w("35%"),
+    backgroundColor: screenbg,
+    marginBottom: h("2%"),
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+  },
+  imgshow: {
+    width: w("35%"),
+    height: w("35%"),
+    resizeMode: "contain",
+  },
+  strikethrough: {
+    textDecorationLine: "line-through",
+    textDecorationStyle: "solid",
   },
 });
