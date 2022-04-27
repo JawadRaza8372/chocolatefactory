@@ -87,6 +87,7 @@ import {
   View,
   Image,
   TouchableOpacity,
+  SafeAreaView,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { w, h } from "react-native-responsiveness";
