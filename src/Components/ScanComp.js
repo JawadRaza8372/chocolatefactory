@@ -63,8 +63,8 @@ const ScanComp = () => {
         choclateList &&
         choclateList?.filter(
           (dat) =>
-            dat.name.replace("'", " ").replace("’", " ") ===
-            name.replace("'", " ").replace("’", " ")
+            dat.name.replace(/[^a-zA-Z ]/g, "") ===
+            name.replace(/[^a-zA-Z ]/g, "")
         );
       setproduct(newproduct);
     }

@@ -32,7 +32,7 @@ export default NewsCard;
 const styles = StyleSheet.create({
   newsCard: {
     width: w("93%"),
-    height: h("20%"),
+    height: h("18%"),
     alignSelf: "center",
     position: "relative",
     borderRadius: h("3%"),

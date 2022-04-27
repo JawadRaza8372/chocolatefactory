@@ -18,7 +18,7 @@ export default HeaderInfo;
 const styles = StyleSheet.create({
   mainDiv: {
     width: "95%",
-    height: h("10%"),
+    height: h("9%"),
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -39,10 +39,10 @@ const styles = StyleSheet.create({
   },
   hding: {
     fontSize: h("2.5%"),
-    fontWeight: "bold",
+    fontWeight: "900",
   },
   desc: {
-    fontSize: h("1.9%"),
+    fontSize: h("1.7%"),
     color: "grey",
   },
 });

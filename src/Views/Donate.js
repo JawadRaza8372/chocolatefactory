@@ -285,6 +285,7 @@ import {
   View,
   Image,
   TouchableOpacity,
+  SafeAreaView,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { w, h } from "react-native-responsiveness";
@@ -302,7 +303,7 @@ const Donate = ({ navigation }) => {
     },
   ];
   return (
-    <View style={{ width: "100%", height: "100%" }}>
+    <SafeAreaView style={{ width: "100%", height: "100%" }}>
       <ScreenHeader
         isMenuButton
         title={"Donate"}
@@ -342,7 +343,7 @@ const Donate = ({ navigation }) => {
           />
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

@@ -27,8 +27,11 @@ const SearchComp = ({ searchtxt, onClick }) => {
     const newres =
       choclateList &&
       choclateList.filter((dat) => {
-        const newtitle = dat.name.toUpperCase();
-        const serchtext = searchtxt.toUpperCase();
+        const newtitle = dat.name.replace(/[^a-zA-Z ]/g, "").toUpperCase();
+        const parsin = searchtxt
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "");
+        const serchtext = parsin.replace(/[^a-zA-Z ]/g, "").toUpperCase();
         return newtitle === serchtext || newtitle.includes(serchtext);
       });
     if (newres) {

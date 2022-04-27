@@ -158,7 +158,7 @@ const AboutUs = ({ navigation }) => {
     },
   ];
   return (
-    <View style={{ width: "100%", height: "100%" }}>
+    <SafeAreaView style={{ width: "100%", height: "100%" }}>
       <ScreenHeader
         isMenuButton
         title={"About Us"}
@@ -206,7 +206,7 @@ const AboutUs = ({ navigation }) => {
           }}
         />
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

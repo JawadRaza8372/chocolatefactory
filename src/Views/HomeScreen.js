@@ -28,7 +28,22 @@ const HomeScreen = ({ navigation }) => {
   const [isLoading, setisLoading] = useState(false);
   const [selectedReason, setselectedReason] = useState("");
   const [searchtxt, setsearchtxt] = useState("");
+  const [selectedalphabet, setselectedalphabet] = useState("");
   const { choclateList, lastupdate } = useSelector((state) => state.project);
+  const newfilteredlist = () => {
+    if (selectedalphabet) {
+      const newres =
+        choclateList &&
+        choclateList.filter((dat) => {
+          const newtitle = dat.name.toUpperCase().charAt(0);
+          const serchtext = selectedalphabet.toUpperCase();
+          return newtitle === serchtext;
+        });
+      if (newres) {
+        setchocoItems(newres);
+      }
+    }
+  };
   const myfilteredlist = () => {
     // const statusBg =
     if (selected !== "All") {
@@ -74,6 +89,11 @@ const HomeScreen = ({ navigation }) => {
   useEffect(() => {
     myfilteredlist();
   }, [selected, selectedReason]);
+  useEffect(() => {
+    if (selectedalphabet) {
+      newfilteredlist();
+    }
+  }, [selectedalphabet]);
 
   const dataforMenu = [
     {
@@ -84,14 +104,14 @@ const HomeScreen = ({ navigation }) => {
       },
     },
     {
-      title: "RECOMMENDED",
+      title: "Recommended",
       onpressfun: () => {
         setselected("RECOMMENDED");
         setshowModal(false);
       },
     },
     {
-      title: "CANNOT RECOMMEND",
+      title: "Cannot recommend",
       onpressfun: () => {
         setselected("CANNOT_RECOMMEND");
         setselectedReason("");
@@ -99,7 +119,7 @@ const HomeScreen = ({ navigation }) => {
       },
     },
     {
-      title: "NR - Other issues",
+      title: "NR - Other Issues",
       onpressfun: () => {
         setselected("CANNOT_RECOMMEND");
         setselectedReason("CANNOT_RECOMMEND_OTHER_ISSUES");
@@ -107,7 +127,7 @@ const HomeScreen = ({ navigation }) => {
       },
     },
     {
-      title: "NR - Did not disclose",
+      title: "NR - Did Not Disclose",
       onpressfun: () => {
         setselected("CANNOT_RECOMMEND");
         setselectedReason("CANNOT_RECOMMEND_DID_NOT_DISCLOSE");
@@ -115,7 +135,7 @@ const HomeScreen = ({ navigation }) => {
       },
     },
     {
-      title: "NR - Did not respond",
+      title: "NR - Did Not Respond",
       onpressfun: () => {
         setselected("CANNOT_RECOMMEND");
         setselectedReason("CANNOT_RECOMMEND_DID_NOT_RESPOND");
@@ -123,7 +143,7 @@ const HomeScreen = ({ navigation }) => {
       },
     },
     {
-      title: "NR - Working on issues",
+      title: "NR - Working on Issues",
       onpressfun: () => {
         setselected("CANNOT_RECOMMEND");
         setselectedReason("CANNOT_RECOMMEND_WORKING_ON_ISSUES");
@@ -139,7 +159,7 @@ const HomeScreen = ({ navigation }) => {
       },
     },
     {
-      title: "MIXED",
+      title: "Mixed",
       onpressfun: () => {
         setselected("MIXED");
         setshowModal(false);
@@ -178,7 +198,34 @@ const HomeScreen = ({ navigation }) => {
       },
     },
   ];
-
+  const alphabet = [
+    { title: "a" },
+    { title: "b" },
+    { title: "c" },
+    { title: "d" },
+    { title: "e" },
+    { title: "f" },
+    { title: "g" },
+    { title: "h" },
+    { title: "i" },
+    { title: "j" },
+    { title: "k" },
+    { title: "l" },
+    { title: "m" },
+    { title: "n" },
+    { title: "o" },
+    { title: "p" },
+    { title: "q" },
+    { title: "r" },
+    { title: "s" },
+    { title: "t" },
+    { title: "u" },
+    { title: "v" },
+    { title: "w" },
+    { title: "x" },
+    { title: "y" },
+    { title: "z" },
+  ];
   const itemonPress = (data) => {
     navigation.navigate("chocoItemDesc", { data: data });
   };
@@ -186,8 +233,11 @@ const HomeScreen = ({ navigation }) => {
     const newres =
       choclateList &&
       choclateList.filter((dat) => {
-        const newtitle = dat.name.toUpperCase();
-        const serchtext = searchtxt.toUpperCase();
+        const newtitle = dat.name.replace(/[^a-zA-Z ]/g, "").toUpperCase();
+        const parsin = searchtxt
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "");
+        const serchtext = parsin.replace(/[^a-zA-Z ]/g, "").toUpperCase();
         return newtitle === serchtext || newtitle.includes(serchtext);
       });
     if (newres) {
@@ -226,57 +276,181 @@ const HomeScreen = ({ navigation }) => {
           style={{
             width: "98%",
             flex: 1,
-            marginVertical: 2,
             alignSelf: "center",
+            position: "relative",
           }}
         >
           {/* <ScrollView> */}
           <TextInput
-            placeholder="search"
+            placeholder="Search"
             style={styles.searchinp}
             onChangeText={(text) => setsearchtxt(text)}
           />
 
-          <ScrollView>
-            <NewsCard onClickf={() => navigation.navigate("newsDesc")} />
-            <HeaderInfo
-              title="CHOCOLATE LIST"
-              subtitle={"Last Updated:" + `${lastupdate}`}
+          {/* <View
+            style={{
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexDirection: "row",
+            }}
+          >
+            <View style={{ width: "95%", height: "100%" }}>
+              {choclateList && chocoItems && !isLoading ? (
+                <FlatList
+                  data={chocoItems}
+                  keyExtractor={(item, index) => index}
+                  ListHeaderComponent={
+                    <>
+                      <NewsCard
+                        onClickf={() => navigation.navigate("newsDesc")}
+                      />
+                      <HeaderInfo
+                        title="CHOCOLATE LIST"
+                        subtitle={"Last Updated:" + `${lastupdate}`}
+                      >
+                        <TouchableOpacity
+                          onPress={toggleModal}
+                          style={styles.flters}
+                        >
+                          <View style={styles.minibtn}>
+                            <Text>Filters</Text>
+                            <AntDesign name="right" size={24} color="black" />
+                          </View>
+                          <View style={styles.selecteddiv}>
+                            <Text style={styles.statsTxt}>
+                              {selected === "All"
+                                ? "All"
+                                : selected === "RECOMMENDED"
+                                ? "Recomanded"
+                                : selected === "CANNOT_RECOMMEND"
+                                ? "Not Recomanded"
+                                : selected === "MIXED"
+                                ? "Mixed"
+                                : ""}
+                            </Text>
+                          </View>
+                        </TouchableOpacity>
+                      </HeaderInfo>
+                    </>
+                  }
+                  renderItem={({ item, index }) => (
+                    <>
+                      <ItemCard
+                        data={item}
+                        key={index}
+                        onClickF={itemonPress}
+                      />
+                    </>
+                  )}
+                />
+              ) : (
+                <View style={styles.isLoading}>
+                  <ActivityIndicator size="large" color={mainColor} />
+                </View>
+              )}
+            </View>
+            <View
+              style={{
+                width: "5%",
+                height: "100%",
+                // backgroundColor: "red",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexDirection: "column",
+              }}
             >
-              <TouchableOpacity onPress={toggleModal} style={styles.flters}>
-                <View style={styles.minibtn}>
-                  <Text>Filters</Text>
-                  <AntDesign name="right" size={24} color="black" />
-                </View>
-                <View style={styles.selecteddiv}>
-                  <Text style={styles.statsTxt}>
-                    {selected === "All"
-                      ? "All"
-                      : selected === "RECOMMENDED"
-                      ? "Recomanded"
-                      : selected === "CANNOT_RECOMMEND"
-                      ? "Not Recomanded"
-                      : selected === "MIXED"
-                      ? "Mixed"
-                      : ""}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            </HeaderInfo>
-            {choclateList && chocoItems && !isLoading ? (
-              <FlatList
-                data={chocoItems}
-                keyExtractor={(item, index) => index}
-                renderItem={({ item, index }) => (
-                  <ItemCard data={item} key={index} onClickF={itemonPress} />
-                )}
-              />
-            ) : (
-              <View style={styles.isLoading}>
-                <ActivityIndicator size="large" color={mainColor} />
-              </View>
-            )}
-          </ScrollView>
+              {alphabet.map((dat) => (
+                <TouchableOpacity
+                  style={{ width: "100%", marginVertical: 2 }}
+                  onPress={() => console.log(dat.title)}
+                >
+                  <Text>{dat.title}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View> */}
+          {choclateList && chocoItems && !isLoading ? (
+            <FlatList
+              data={chocoItems}
+              keyExtractor={(item, index) => index}
+              ListHeaderComponent={
+                <>
+                  <NewsCard onClickf={() => navigation.navigate("newsDesc")} />
+                  <HeaderInfo
+                    title="CHOCOLATE LIST"
+                    subtitle={"Last Updated:" + `${lastupdate}`}
+                  >
+                    <TouchableOpacity
+                      onPress={toggleModal}
+                      style={styles.flters}
+                    >
+                      <View style={styles.minibtn}>
+                        <Text>Filters</Text>
+                        <AntDesign name="right" size={24} color="black" />
+                      </View>
+                      <View style={styles.selecteddiv}>
+                        <Text style={styles.statsTxt}>
+                          {selected === "All"
+                            ? "All"
+                            : selected === "RECOMMENDED"
+                            ? "Recomanded"
+                            : selected === "CANNOT_RECOMMEND"
+                            ? "Not Recomanded"
+                            : selected === "MIXED"
+                            ? "Mixed"
+                            : ""}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                  </HeaderInfo>
+                </>
+              }
+              renderItem={({ item, index }) => (
+                <>
+                  <ItemCard
+                    data={item}
+                    key={index}
+                    onClickF={itemonPress}
+                    notcenter={true}
+                  />
+                </>
+              )}
+            />
+          ) : (
+            <View style={styles.isLoading}>
+              <ActivityIndicator size="large" color={mainColor} />
+            </View>
+          )}
+          {/* </ScrollView> */}
+          <View
+            style={{
+              width: "7%",
+              height: h("52%"),
+              position: "absolute",
+              bottom: 0,
+              right: 0,
+            }}
+          >
+            <ScrollView contentContainerStyle={{ width: "100%" }}>
+              {alphabet.map((dat) => (
+                <TouchableOpacity
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                  onPress={() => setselectedalphabet(dat.title)}
+                >
+                  <Text style={{ fontSize: h("1.5%") }}>{dat.title}</Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
         </View>
         <CustomNavBtn
           data={dataNew}
@@ -334,7 +508,7 @@ const styles = StyleSheet.create({
     height: h("6%"),
     backgroundColor: "lightgrey",
     alignSelf: "center",
-    marginVertical: h("1%"),
+    marginVertical: h("0.7%"),
     borderRadius: h("2%"),
     paddingHorizontal: h("2%"),
   },
@@ -384,7 +558,7 @@ const styles = StyleSheet.create({
   bgModal: {
     width: "100%",
     height: "100%",
-    backgroundColor: "rgba(0,0,0,0.6)",
+    backgroundColor: "rgba(255,255,255,0.7)",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -399,13 +573,25 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "column",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
   },
   hedtxt: {
-    width: "100%",
-    height: h("6%"),
+    width: w("85%"),
+    height: h("7%"),
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    borderWidth: 0,
+    borderBottomWidth: 1,
+    borderBottomColor: "lightgrey",
   },
   opttxt: {
     width: "100%",
@@ -416,10 +602,14 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     flexDirection: "row",
     paddingLeft: w("4%"),
+    borderWidth: 0,
+    borderBottomWidth: 1,
+    borderBottomColor: "lightgrey",
   },
   headtxt: {
     fontSize: h("4%"),
     fontWeight: "bold",
+    marginVertical: h("0.6%"),
   },
   desctext: {
     fontSize: h("3.2%"),
