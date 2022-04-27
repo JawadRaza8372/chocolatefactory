@@ -7,7 +7,7 @@ const NewsCard = ({ bgColor, onClickf }) => {
     <TouchableOpacity onPress={onClickf} style={styles.newsCard}>
       <Image
         source={{
-          uri: "https://images.unsplash.com/photo-1477332552946-cfb384aeaf1c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aGVhbHRofGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60",
+          uri: "https://images.unsplash.com/photo-1601850513971-239e8aa2b08e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
         }}
         style={styles.imgshow}
       />
