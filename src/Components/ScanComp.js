@@ -20,6 +20,7 @@ import FbShareComp from "./FbShareComp";
 import NotFoundComp from "./NotFoundComp";
 import { setFeatures } from "../store/projectSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import CustomBarCodeScanner from "./CustomBarCodeScanner";
 const ScanComp = () => {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
@@ -75,12 +76,12 @@ const ScanComp = () => {
   };
   // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
 
-  if (hasPermission === null) {
-    return <Text>Requesting for camera permission</Text>;
-  }
-  if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
-  }
+  // if (hasPermission === null) {
+  //   return <Text>Requesting for camera permission</Text>;
+  // }
+  // if (hasPermission === false) {
+  //   return <Text>No access to camera</Text>;
+  // }
   const checkingrenders = () => {
     if (codeRes) {
       // name, status, logo_url
@@ -243,11 +244,12 @@ const ScanComp = () => {
           {scanned ? (
             <CustomButton title={"Scan"} onClick={clearfunc} />
           ) : (
-            <BarCodeScanner
+            <CustomBarCodeScanner onScanned={handleBarCodeScanned} />
+          )}
+          {/* <BarCodeScanner
               onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
               style={{ width: w("100%"), height: h("100") }}
-            />
-          )}
+            /> */}
         </View>
         {checkingrenders()}
       </ScrollView>
