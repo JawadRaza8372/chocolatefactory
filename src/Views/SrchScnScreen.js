@@ -1,4 +1,11 @@
-import { SafeAreaView, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  Platform,
+} from "react-native";
 import React, { useState } from "react";
 import CustomNavBtn from "../Components/CustomNavBtn";
 import ScreenHeader from "../Components/ScreenHeader";
@@ -10,6 +17,20 @@ import { NavigationContainer } from "@react-navigation/native";
 const SrchScnScreen = ({ navigation }) => {
   const [selected, setselected] = useState("Search");
   const [searchtext, setsearchtext] = useState("");
+  const dataOs = [
+    {
+      title: "  List",
+      onpressfun: () => {
+        navigation.goBack();
+      },
+    },
+    {
+      title: "Search",
+      onpressfun: () => {
+        setselected("Search");
+      },
+    },
+  ];
   const data = [
     {
       title: "  List",
@@ -63,7 +84,10 @@ const SrchScnScreen = ({ navigation }) => {
           <SearchComp searchtxt={searchtext} onClick={itemonPress} />
         ) : null}
       </View>
-      <CustomNavBtn data={data} activeVal={selected} />
+      <CustomNavBtn
+        data={Platform.OS === "ios" ? dataOs : data}
+        activeVal={selected}
+      />
     </SafeAreaView>
   );
 };

@@ -5,12 +5,13 @@ import {
   View,
   Image,
   Button,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import SetAsfvrt from "./SetAsFvrt";
 import { w, h } from "react-native-responsiveness";
-import { screenbg } from "../AppColors";
+import { mainColor, screenbg } from "../AppColors";
 import SharetoLink from "./SharetoLink";
 import CustomButton from "./CustomButton";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,6 +26,7 @@ const ScanComp = () => {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [productNotFound, setproductNotFound] = useState(false);
+  const [reloading, setreloading] = useState(false);
   const [codeRes, setcodeRes] = useState("");
   const [product, setproduct] = useState([]);
   const { choclateList, lastupdate } = useSelector((state) => state.project);
@@ -44,6 +46,7 @@ const ScanComp = () => {
   const handleBarCodeScanned = async ({ type, data }) => {
     // if (type === "512" || type === 512) {
     setScanned(true);
+    setreloading(true);
     // setcodeRes(data);
     const itemDet3 = await axios.get(`https://barcode.monster/api/${data}`, {
       headers: { "User-Agent": "Chocolate List App", Version: "1.0" },
@@ -54,6 +57,7 @@ const ScanComp = () => {
     );
     if (itemDet3.data.status === "not found" && itemDet2.data.status === 0) {
       setproductNotFound(true);
+      setreloading(false);
     } else {
       let name = itemDet3.data.company
         ? itemDet3.data.company
@@ -68,6 +72,7 @@ const ScanComp = () => {
             name.replace(/[^a-zA-Z ]/g, "")
         );
       setproduct(newproduct);
+      setreloading(false);
     }
     // } else {
     //   alert("not supported this format");
@@ -84,8 +89,6 @@ const ScanComp = () => {
   // }
   const checkingrenders = () => {
     if (codeRes) {
-      // name, status, logo_url
-
       if (product.length > 0) {
         const statusBg =
           product[0].status === "RECOMMENDED"
@@ -242,7 +245,31 @@ const ScanComp = () => {
           }}
         >
           {scanned ? (
-            <CustomButton title={"Scan"} onClick={clearfunc} />
+            reloading ? (
+              <View
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexDirection: "column",
+                }}
+              >
+                <ActivityIndicator size={"large"} color={mainColor} />
+                <Text
+                  style={{
+                    fontSize: h("2.4%"),
+                    marginTop: h("1%"),
+                    color: mainColor,
+                  }}
+                >
+                  Please Wait
+                </Text>
+              </View>
+            ) : (
+              <CustomButton title={"Scan"} onClick={clearfunc} />
+            )
           ) : (
             <CustomBarCodeScanner onScanned={handleBarCodeScanned} />
           )}
