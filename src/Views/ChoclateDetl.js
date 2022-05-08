@@ -72,7 +72,7 @@ const ChoclateDetl = ({ route, navigation }) => {
       : status === "MIXED"
       ? notRecomadMsg
       : "";
-
+  const statsTxt = status === "CANNOT_RECOMMEND" ? "CANNOT RECOMMEND" : status;
   const { features } = useSelector((state) => state.project);
   const check = features && features?.filter((dat) => dat.name === name);
   const removedata = async () => {
@@ -122,7 +122,9 @@ const ChoclateDetl = ({ route, navigation }) => {
               backgroundColor: statusBg ? statusBg : "black",
             }}
           >
-            <Text style={styles.statusTxt}>{status ? status : "Unkonwn"}</Text>
+            <Text style={styles.statusTxt}>
+              {status ? statsTxt : "Unkonwn"}
+            </Text>
           </View>
           {check.length > 0 && (
             <TouchableOpacity onPress={removedata}>

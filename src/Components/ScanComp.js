@@ -98,7 +98,10 @@ const ScanComp = () => {
             : product[0].status === "MIXED"
             ? "gold"
             : "black";
-
+        const statsTxt =
+          product[0].status === "CANNOT_RECOMMEND"
+            ? "CANNOT RECOMMEND"
+            : product[0].status;
         const removedata = async () => {
           const filterdDat = features.filter(
             (dat) => dat.name !== product[0].name
@@ -185,7 +188,7 @@ const ScanComp = () => {
                 }}
               >
                 <Text style={styles.statusTxt}>
-                  {product[0].status ? product[0].status : "Unkonwn"}
+                  {product[0].status ? statsTxt : "Unkonwn"}
                 </Text>
               </View>
               {check.length > 0 && (

@@ -77,6 +77,8 @@ const ItemCard = ({ data, onClickF, notcenter }) => {
   const linethrough =
     status_reason === "CANNOT_RECOMMEND_OTHER_ISSUES" ? true : false;
   const check = features && features?.filter((dat) => dat.name === name);
+  const statustext =
+    status === "CANNOT_RECOMMEND" ? "CANNOT RECOMMEND" : status;
   const statusBg =
     status === "RECOMMENDED"
       ? "green"
@@ -114,7 +116,7 @@ const ItemCard = ({ data, onClickF, notcenter }) => {
             }}
           >
             <View style={{ ...styles.status, backgroundColor: statusBg }}>
-              <Text style={styles.statusTxt}>{status}</Text>
+              <Text style={styles.statusTxt}>{statustext}</Text>
             </View>
             {check.length > 0 && (
               <AntDesign name="heart" size={h("3%")} color="red" />

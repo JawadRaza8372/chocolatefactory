@@ -32,15 +32,28 @@ const HomeScreen = ({ navigation }) => {
   const { choclateList, lastupdate } = useSelector((state) => state.project);
   const newfilteredlist = () => {
     if (selectedalphabet) {
-      const newres =
-        choclateList &&
-        choclateList.filter((dat) => {
-          const newtitle = dat.name.toUpperCase().charAt(0);
-          const serchtext = selectedalphabet.toUpperCase();
-          return newtitle === serchtext;
-        });
-      if (newres) {
-        setchocoItems(newres);
+      if (selectedalphabet === "#") {
+        const newres =
+          choclateList &&
+          choclateList.filter((dat) => {
+            const newtitle = dat.name.charAt(0);
+            const checking = isNaN(newtitle);
+            return checking === false;
+          });
+        if (newres) {
+          setchocoItems(newres);
+        }
+      } else {
+        const newres =
+          choclateList &&
+          choclateList.filter((dat) => {
+            const newtitle = dat.name.toUpperCase().charAt(0);
+            const serchtext = selectedalphabet.toUpperCase();
+            return newtitle === serchtext;
+          });
+        if (newres) {
+          setchocoItems(newres);
+        }
       }
     }
   };
@@ -199,6 +212,7 @@ const HomeScreen = ({ navigation }) => {
     },
   ];
   const alphabet = [
+    { title: "#" },
     { title: "a" },
     { title: "b" },
     { title: "c" },
